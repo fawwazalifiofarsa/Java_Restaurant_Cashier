@@ -16,25 +16,25 @@ public class Kasir {
 
         // Input username and password to login.
         while (true) {
-        System.out.println("Please login first.");
-        System.out.println(horizonline);
-        System.out.print("Username  : ");
-        username = input.nextLine();
-        System.out.print("Password  : ");
-        password = input.nextLine();
-        System.out.println("=======================================");
-        // Check if the username and password is correct.
-        if (username.equals(TrueUsername) && password.equals(TruePassword)){
-            System.out.println("Login success.");
+            System.out.println("Please login first.");
+            System.out.println(horizonline);
+            System.out.print("Username  : ");
+            username = input.nextLine();
+            System.out.print("Password  : ");
+            password = input.nextLine();
             System.out.println("=======================================");
-            break;
-        }if (!username.equals(TrueUsername) && !password.equals(TruePassword))  {
-            System.out.println("Wrong username and password");
-            System.out.println("=======================================");
-        } else {
-            System.out.println("Wrong username or password");
-            System.out.println("=======================================");
-        }
+            // Check if the username and password is correct.
+            if (username.equals(TrueUsername) && password.equals(TruePassword)){
+                System.out.println("Login success.");
+                System.out.println("=======================================");
+                break;
+            }if (!username.equals(TrueUsername) && !password.equals(TruePassword))  {
+                System.out.println("Wrong username and password");
+                System.out.println("=======================================");
+            } else {
+                System.out.println("Wrong username or password");
+                System.out.println("=======================================");
+            }
         }
             // Check if there's table available.
             System.out.println("Checking if there's table available...");
