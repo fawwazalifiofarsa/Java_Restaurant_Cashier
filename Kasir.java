@@ -1,35 +1,36 @@
 package Java_Restaurant_Cashier;
 
 import java.util.Scanner;
+
 public class Kasir {
     public static void main(String[] args) {
 
         // Variables declaration.
         Scanner input = new Scanner(System.in);
 
-        String username, TrueUsername, TruePassword, password, horizonline, OrderMore;
-        int table = 2, id_payment_type, menu1, menu2, menu3, id_menu = 1;
+        String username, TrueUsername, TruePassword, password, orderMore;
+        int table = 2, id_payment_type, menu1, menu2, menu3, id_menu = 1, amount;
         double total_price = 0.0, payment, change;
 
         TrueUsername = "kelompok6";
         TruePassword = "kelompok6";
-        horizonline = "=======================================";
 
         // Input username and password to login.
         while (true) {
             System.out.println("Please login first.");
-            System.out.println(horizonline);
+            System.out.println("=======================================");
             System.out.print("Username  : ");
-            username = input.nextLine();
+            username = input.next();
             System.out.print("Password  : ");
-            password = input.nextLine();
+            password = input.next();
             System.out.println("=======================================");
             // Check if the username and password is correct.
-            if (username.equals(TrueUsername) && password.equals(TruePassword)){
+            if (username.equals(TrueUsername) && password.equals(TruePassword)) {
                 System.out.println("Login success.");
                 System.out.println("=======================================");
                 break;
-            }if (!username.equals(TrueUsername) && !password.equals(TruePassword))  {
+            }
+            if (!username.equals(TrueUsername) && !password.equals(TruePassword)) {
                 System.out.println("Wrong username and password");
                 System.out.println("=======================================");
             } else {
@@ -48,7 +49,6 @@ public class Kasir {
                 System.out.println("0. Pay\n1. Fried Rice Pax \n2. Fried Chicken Pax \n3. Hamburger Pax");
                 System.out.print("Please choose your menu : ");
                 id_menu = input.nextInt();
-                input.nextLine();
                 switch (id_menu) {
                     case 0:
                         System.out.println("=======================================");
@@ -60,7 +60,9 @@ public class Kasir {
                         System.out.println("=======================================");
                         System.out.println("Fried Rice Pax = Rp.22000");
                         menu1 = 22000;
-                        total_price = total_price + menu1;
+                        System.out.print("Total amount: ");
+                        amount = input.nextInt();
+                        total_price = total_price + menu1 * amount;
                         System.out.println("Total Price : " + total_price);
                         System.out.println("=======================================");
                         break;
@@ -68,7 +70,9 @@ public class Kasir {
                         System.out.println("=======================================");
                         System.out.println("Fried Chicken Pax = Rp.23000");
                         menu2 = 23000;
-                        total_price = total_price + menu2;
+                        System.out.print("Total amount: ");
+                        amount = input.nextInt();
+                        total_price = total_price + menu2 * amount;
                         System.out.println("Total Price : " + total_price);
                         System.out.println("=======================================");
                         break;
@@ -76,7 +80,9 @@ public class Kasir {
                         System.out.println("=======================================");
                         System.out.println("Hamburger Pax = Rp.24000");
                         menu3 = 24000;
-                        total_price = total_price + menu3;
+                        System.out.print("Total amount: ");
+                        amount = input.nextInt();
+                        total_price = total_price + menu3 * amount;
                         System.out.println("Total Price : " + total_price);
                         System.out.println("=======================================");
                         break;
@@ -86,24 +92,23 @@ public class Kasir {
                         System.out.println("=======================================");
                 }
 
-
-                //Choose to order more or not.
+                // Choose to order more or not.
                 while (true) {
                     System.out.println("Do you want to order more? (y/n)");
                     System.out.print("Your answer : ");
-                    OrderMore = input.nextLine();
+                    orderMore = input.next();
 
-                    if (OrderMore.equalsIgnoreCase("n")) {
+                    if (orderMore.equalsIgnoreCase("n")) {
                         System.out.println("Please choose payment type.");
                         break;
-                    }else if (OrderMore.equalsIgnoreCase("y")) {
+                    } else if (orderMore.equalsIgnoreCase("y")) {
                         System.out.println("Please choose your menu : ");
                         break;
-                    }else {
+                    } else {
                         System.out.println("Please answer (y/n)");
                     }
                 }
-                if (OrderMore.equalsIgnoreCase("n")) {
+                if (orderMore.equalsIgnoreCase("n")) {
                     break;
                 }
             }
@@ -113,8 +118,9 @@ public class Kasir {
             id_payment_type = input.nextInt();
 
             // Cash payment type.
-            if (id_payment_type == 1 ){
+            if (id_payment_type == 1) {
                 System.out.println("=======================================");
+                System.out.println("Total price           : " + total_price);
                 System.out.print("Input payment nominal : ");
                 payment = input.nextInt();
                 change = payment - total_price;
