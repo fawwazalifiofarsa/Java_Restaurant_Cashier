@@ -15,6 +15,7 @@ public class Kasir {
         TruePassword = "kelompok6";
         horizonline = "=======================================";
 
+
         // Input username and password to login.
         while (true) {
             System.out.println("Please login first.");
