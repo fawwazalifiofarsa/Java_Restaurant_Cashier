@@ -1,20 +1,29 @@
 package Java_Restaurant_Cashier;
-
 import java.util.Scanner;
-
 public class Kasir {
     public static void main(String[] args) {
 
         // Variables declaration.
         Scanner input = new Scanner(System.in);
+        String[] friedRice = {"Fried Rice Pax", "Rp. 22000", "22000"};
+        String[] friedChicken = {"Fried Rice Pax", "Rp. 23000", "23000"};
+        String[] hamburger = {"Fried Rice Pax", "Rp. 24000", "24000"};
 
-        String username, TrueUsername, TruePassword, password, orderMore;
-        int table = 2, id_payment_type, menu1, menu2, menu3, id_menu = 1, amount;
-        double total_price = 0.0, payment, change;
-
-        TrueUsername = "kelompok6";
-        TruePassword = "kelompok6";
-
+        String username, 
+            trueUsername = "kelompok6", 
+            truePassword = "kelompok6", 
+            password, 
+            orderMore;
+        int table = 10, 
+            id_payment_type, 
+            id_menu = 1, 
+            customer = 1,
+            amount;
+        double total_price = 0.0, 
+            todays_income = 0.0, 
+            payment, 
+            change;
+        
         // Input username and password to login.
         while (true) {
             System.out.println("Please login first.");
@@ -25,12 +34,12 @@ public class Kasir {
             password = input.next();
             System.out.println("=======================================");
             // Check if the username and password is correct.
-            if (username.equals(TrueUsername) && password.equals(TruePassword)) {
+            if (username.equals(trueUsername) && password.equals(truePassword)) {
                 System.out.println("Login success.");
                 System.out.println("=======================================");
                 break;
             }
-            if (!username.equals(TrueUsername) && !password.equals(TruePassword)) {
+            if (!username.equals(trueUsername) && !password.equals(truePassword)) {
                 System.out.println("Wrong username and password");
                 System.out.println("=======================================");
             } else {
@@ -41,7 +50,8 @@ public class Kasir {
         // Check if there's table available.
         System.out.println("Checking if there's table available...");
         if (table != 0) {
-            System.out.println("Table available.");
+            table--;
+            System.out.println(table + "Table available.");
             System.out.println("=======================================");
 
             // Choose menu.
@@ -58,32 +68,29 @@ public class Kasir {
                         continue;
                     case 1:
                         System.out.println("=======================================");
-                        System.out.println("Fried Rice Pax = Rp.22000");
-                        menu1 = 22000;
+                        System.out.println(friedRice[0] + " = " + friedRice[1]);
                         System.out.print("Total amount: ");
                         amount = input.nextInt();
-                        total_price = total_price + menu1 * amount;
-                        System.out.println("Total Price : " + total_price);
+                        total_price = total_price + Integer.parseInt(friedRice[2]) * amount;
+                        System.out.println("Total Price : Rp. " + total_price);
                         System.out.println("=======================================");
                         break;
                     case 2:
                         System.out.println("=======================================");
-                        System.out.println("Fried Chicken Pax = Rp.23000");
-                        menu2 = 23000;
+                        System.out.println(friedChicken[0] + " = " + friedChicken[1]);
                         System.out.print("Total amount: ");
                         amount = input.nextInt();
-                        total_price = total_price + menu2 * amount;
-                        System.out.println("Total Price : " + total_price);
+                        total_price = total_price + Integer.parseInt(friedChicken[2]) * amount;
+                        System.out.println("Total Price : Rp. " + total_price);
                         System.out.println("=======================================");
                         break;
                     case 3:
                         System.out.println("=======================================");
-                        System.out.println("Hamburger Pax = Rp.24000");
-                        menu3 = 24000;
+                        System.out.println(hamburger[0] + " = " + hamburger[1]);
                         System.out.print("Total amount: ");
                         amount = input.nextInt();
-                        total_price = total_price + menu3 * amount;
-                        System.out.println("Total Price : " + total_price);
+                        total_price = total_price + Integer.parseInt(hamburger[2]) * amount;
+                        System.out.println("Total Price : Rp. " + total_price);
                         System.out.println("=======================================");
                         break;
                     default:
@@ -132,6 +139,8 @@ public class Kasir {
                     System.out.println("Printing receipt...");
                     System.out.println("Thanks for the purchase!");
                     System.out.println("=======================================");
+                    todays_income += total_price;
+                    total_price = 0.0;
                 } else {
                     System.out.println("=======================================");
                     System.out.println("Please input the correct nominal.");
@@ -157,6 +166,5 @@ public class Kasir {
             System.out.println("There's no table available.");
             System.out.println("=======================================");
         }
-
     }
 }
