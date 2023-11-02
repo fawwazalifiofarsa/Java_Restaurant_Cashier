@@ -37,10 +37,14 @@ public class Kasir {
             // Check if the username and password is correct.
             for (int i = 0; i < user.length; i++) {
                 for (int j = 0; j < user[i].length; j++) {
-                    if (user[i][0].equals(username) && user[i][j].equals(password)) {
+                    if (user[i][0].equals(username) && user[i][1].equals(password)) {
                         checkUser = false;
                     }
                 }
+            }
+            if (checkUser) {
+                System.out.println("Username or password is incorrect. Please try again.");
+                System.out.println("=======================================");
             }
         }
         // Check if there's table available.
