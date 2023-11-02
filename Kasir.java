@@ -6,14 +6,12 @@ public class Kasir {
         // Variables declaration.
         Scanner input = new Scanner(System.in);
         String[][] menu = {{"Fried Rice Pax", "Rp. 22000", "22000"},
-                           {"Fried Chicken Pax", "Rp. 23000", "23000"},
-                           {"Hamburger Pax", "Rp. 24000", "24000"}};
+                            {"Fried Chicken Pax", "Rp. 23000", "23000"},
+                            {"Hamburger Pax", "Rp. 24000", "24000"}};
         String[][] user = {{ "fawwaz", "fawwaz"},
-                           {"ekya" , "ekya"},
-                           { "raul", "raul"}};
+                            {"ekya" , "ekya"},
+                            { "raul", "raul"}};
         String username,
-                trueUsername = "kelompok6",
-                truePassword = "kelompok6",
                 password,
                 orderMore;
         int table = 3,
@@ -25,9 +23,10 @@ public class Kasir {
                 todays_income = 0.0,
                 payment,
                 change;
+        boolean checkUser = true;
 
         // Input username and password to login.
-        while (true) {
+        while (checkUser) {
             System.out.println("Please login first.");
             System.out.println("=======================================");
             System.out.print("Username  : ");
@@ -36,17 +35,12 @@ public class Kasir {
             password = input.next();
             System.out.println("=======================================");
             // Check if the username and password is correct.
-            if (username.equals(trueUsername) && password.equals(truePassword)) {
-                System.out.println("Login success.");
-                System.out.println("=======================================");
-                break;
-            }
-            if (!username.equals(trueUsername) && !password.equals(truePassword)) {
-                System.out.println("Wrong username and password");
-                System.out.println("=======================================");
-            } else {
-                System.out.println("Wrong username or password");
-                System.out.println("=======================================");
+            for (int i = 0; i < user.length; i++) {
+                for (int j = 0; j < user[i].length; j++) {
+                    if (user[i][0].equals(username) && user[i][j].equals(password)) {
+                        checkUser = false;
+                    }
+                }
             }
         }
         // Check if there's table available.
