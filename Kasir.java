@@ -5,41 +5,47 @@ public class Kasir {
 
         // Variables declaration.
         Scanner input = new Scanner(System.in);
-        String[] friedRice = {"Fried Rice Pax", "Rp. 22000", "22000"};
-        String[] friedChicken = {"Fried Rice Pax", "Rp. 23000", "23000"};
-        String[] hamburger = {"Fried Rice Pax", "Rp. 24000", "24000"};
-
-        String username, 
-            trueUsername = "kelompok6", 
-            truePassword = "kelompok6", 
-            password, 
-            orderMore;
+        String[][] menu = {{"Fried Rice Pax", "Rp. 22000", "22000"},
+                            {"Fried Chicken Pax", "Rp. 23000", "23000"},
+                            {"Hamburger Pax", "Rp. 24000", "24000"}};
+        String[][] user = {{ "fawwaz", "fawwaz"},
+                            {"ekya" , "ekya"},
+                            { "raul", "raul"}};
+        String lineBreak = "=======================================",
+                username,
+                password,
+                orderMore;
         int table = 10, 
-            id_payment_type, 
-            id_menu = 1, 
-            customer = 1,
-            amount;
+                id_payment_type, 
+                id_menu = 1, 
+                customer = 1,
+                amount;
         double total_price = 0.0, 
-            todays_income = 0.0, 
-            payment, 
-            change;
+                todays_income = 0.0, 
+                payment, 
+                change;
+        boolean checkUser = true;
         
         // Input username and password to login.
         while (checkUser) {
             System.out.println("Please login first.");
-            System.out.println("=======================================");
+            System.out.println(lineBreak);
             System.out.print("Username  : ");
             username = input.next();
             System.out.print("Password  : ");
             password = input.next();
-            System.out.println("=======================================");
+            System.out.println(lineBreak);
             // Check if the username and password is correct.
             for (int i = 0; i < user.length; i++) {
                 for (int j = 0; j < user[i].length; j++) {
-                    if (user[i][0].equals(username) && user[i][j].equals(password)) {
-                        checkUser = false;
+                    if (user[i][0].equals(username) && user[j][1].equals(password)) {
+                        System.out.println();
                     }
                 }
+            }
+            if (checkUser) {
+                System.out.println("Username or password is incorrect. Please try again.");
+                System.out.println(lineBreak);
             }
         }
         // Check if there's table available.
@@ -49,7 +55,7 @@ public class Kasir {
             if (table != 0) {
                 table--;
                 System.out.println(table + " Table available.");
-                System.out.println("=======================================");
+                System.out.println(lineBreak);
 
                 // Choose menu.
                 while (id_menu != 0) {
@@ -58,42 +64,42 @@ public class Kasir {
                     id_menu = input.nextInt();
                     switch (id_menu) {
                         case 0:
-                            System.out.println("=======================================");
+                            System.out.println(lineBreak);
                             System.out.println("Checkout");
                             System.out.println("Total Price : " + total_price);
-                            System.out.println("=======================================");
+                            System.out.println(lineBreak);
                             continue;
                         case 1:
-                            System.out.println("=======================================");
+                            System.out.println(lineBreak);
                             System.out.println(menu[0][0] + " = " + menu[0][1]);
                             System.out.print("Total amount: ");
                             amount = input.nextInt();
                             total_price = total_price + Integer.parseInt(menu[0][2]) * amount;
                             System.out.println("Total Price : Rp. " + total_price);
-                            System.out.println("=======================================");
+                            System.out.println(lineBreak);
                             break;
                         case 2:
-                            System.out.println("=======================================");
+                            System.out.println(lineBreak);
                             System.out.println(menu[1][0] + " = " + menu[1][1]);
                             System.out.print("Total amount: ");
                             amount = input.nextInt();
                             total_price = total_price + Integer.parseInt(menu[1][2]) * amount;
                             System.out.println("Total Price : Rp. " + total_price);
-                            System.out.println("=======================================");
+                            System.out.println(lineBreak);
                             break;
                         case 3:
-                            System.out.println("=======================================");
+                            System.out.println(lineBreak);
                             System.out.println(menu[2][0] + " = " + menu[2][1]);
                             System.out.print("Total amount: ");
                             amount = input.nextInt();
                             total_price = total_price + Integer.parseInt(menu[2][2]) * amount;
                             System.out.println("Total Price : Rp. " + total_price);
-                            System.out.println("=======================================");
+                            System.out.println(lineBreak);
                             break;
                         default:
-                            System.out.println("=======================================");
+                            System.out.println(lineBreak);
                             System.out.println("Please select available menu.");
-                            System.out.println("=======================================");
+                            System.out.println(lineBreak);
                     }
 
                     // Choose to order more or not.
@@ -123,7 +129,7 @@ public class Kasir {
 
                 // Cash payment type.
                 if (id_payment_type == 1) {
-                    System.out.println("=======================================");
+                    System.out.println(lineBreak);
                     System.out.println("Total price           : " + total_price);
                     System.out.print("Input payment nominal : ");
                     payment = input.nextInt();
@@ -132,36 +138,36 @@ public class Kasir {
                     // Print the receipt.
                     if (payment - total_price >= 0) {
                         System.out.println("Change                : " + change);
-                        System.out.println("=======================================");
+                        System.out.println(lineBreak);
                         System.out.println("Printing receipt...");
                         System.out.println("Thanks for the purchase!");
-                        System.out.println("=======================================");
+                        System.out.println(lineBreak);
                         todays_income += total_price;
                         total_price = 0.0;
                     } else {
-                        System.out.println("=======================================");
+                        System.out.println(lineBreak);
                         System.out.println("Please input the correct nominal.");
-                        System.out.println("=======================================");
+                        System.out.println(lineBreak);
                     }
 
                     // Debit payment type.
                 } else if (id_payment_type == 2) {
-                    System.out.println("=======================================");
+                    System.out.println(lineBreak);
                     System.out.println("Printing receipt...");
                     System.out.println("Thanks for the purchase!");
-                    System.out.println("=======================================");
+                    System.out.println(lineBreak);
 
                     // Unavailable payment type.
                 } else {
-                    System.out.println("=======================================");
+                    System.out.println(lineBreak);
                     System.out.println("Please choose available payment type.");
-                    System.out.println("=======================================");
+                    System.out.println(lineBreak);
                 }
 
                 // Table unavailable.
             } else {
                 System.out.println("There's no table available.");
-                System.out.println("=======================================");
+                System.out.println(lineBreak);
                 break;
             }
             todays_income+= total_price;
