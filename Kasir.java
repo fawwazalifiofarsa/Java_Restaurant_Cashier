@@ -26,6 +26,7 @@ public class Kasir {
                 payment,
                 change;
 
+
         // Input username and password to login.
         while (true) {
             System.out.println("Please login first.");
