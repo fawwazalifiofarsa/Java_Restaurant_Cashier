@@ -1,6 +1,16 @@
 package Java_Restaurant_Cashier;
 import java.util.Scanner;
 public class Kasir {
+    public static boolean Login(String username, String password, boolean checkUser) {
+        for (int i = 0; i < user.length; i++) {
+            for (int j = 0; j < user[i].length; j++) {
+                if (user[i][0].equals(username) && user[i][1].equals(password)) {  
+        checkUser = false;
+                    }
+                }
+            }
+        return checkUser;
+    }
     public static void main(String[] args) {
 
         // Variables declaration.
@@ -38,8 +48,8 @@ public class Kasir {
             // Check if the username and password is correct.
             for (int i = 0; i < user.length; i++) {
                 for (int j = 0; j < user[i].length; j++) {
-                    if (user[i][0].equals(username) && user[j][1].equals(password)) {
-                        System.out.println();
+                    if (user[i][0].equals(username) && user[i][1].equals(password)) {
+                        checkUser = false;
                     }
                 }
             }
