@@ -5,6 +5,144 @@ public class Kasir {
 
         // Variables declaration.
         Scanner input = new Scanner(System.in);
+
+        String[] roles = {
+            "Cashier",
+            "Administrator",
+            "Manager"
+        };
+        String[][] user = {
+            { "fawwaz", "fawwaz", roles[0] },
+            { "ekya", "ekya", roles[1] },
+            { "raul", "raul", roles[2] }
+        };
+        String 
+            userAuthorization = null;
+        int
+            table = 2,
+            customer = 1,
+            inputAction;
+
+        // Login with function
+        userAuthorization = login(input, user, userAuthorization);
+        if (userAuthorization == roles[0]) {
+            System.out.println("1. Process Transaction");
+            System.out.println("2. Input Tables");
+            System.out.println("3. View Sales Reports");
+            System.out.println("Select your action : ");
+            inputAction = input.nextInt();
+            switch (inputAction) {
+                case 1:
+                    ProcessTransaction(input, customer, table);
+                    break;
+            
+                default:
+                    break;
+            }
+        }
+    }
+    
+    // Functions Initialization
+
+    public static void ProcessTransaction(
+        Scanner input,
+        int customer,
+        int table
+    ) {
+        String
+            confirmAnotherTransaction;
+        double 
+            totalPrice,
+            todaysIncome = 0.0;
+        boolean
+            checkTable;
+        while (true) {
+            // Check if there's table available.
+            checkTable = checkTable(table);
+            System.out.println("Customer " + customer);
+            if (checkTable) {
+                
+                // Choose menu with function
+                totalPrice = chooseMenu(input);
+
+                // Choose payment type.
+                Payment(input, totalPrice, todaysIncome);
+
+                todaysIncome += totalPrice;
+                customer++;
+
+                System.out.print("Do you want to add another transaction? (y/n) : ");
+                while (true) {
+                    confirmAnotherTransaction = input.next();
+                    if (confirmAnotherTransaction.equalsIgnoreCase("y")) {
+                        ProcessTransaction(input, customer, table);
+                    } else if (confirmAnotherTransaction.equalsIgnoreCase("n")) {
+                        System.out.println("Total customers : " + customer);
+                        System.out.println("Today's income is : Rp. " + todaysIncome);
+                        break;
+                    } else {
+                        System.out.print("Please choose the available options (y/n) : ");
+                        continue;
+                    }
+                }
+                break;
+            } else {
+                System.out.println("There's no available table.");
+                break;
+            }
+        }
+    }
+
+    public static String login(
+        Scanner input,
+        String[][] user,
+        String userAuthorization
+        ) {
+        boolean checkUser = true;
+        String username, password;
+
+        // Input username and password to login.
+        while (checkUser) {
+            System.out.println("Please login first.");
+            System.out.print("Username  : ");
+            username = input.next();
+            System.out.print("Password  : ");
+            password = input.next();
+            // Check if the username and password is correct.
+            for (int i = 0; i < user.length; i++) {
+                for (int j = 0; j < user[i].length; j++) {
+                    if (user[i][0].equals(username) && user[i][1].equals(password)) {
+                        checkUser = false;
+                        userAuthorization = user[i][2];
+                        System.out.println("Login Success!");
+                        System.out.println("Logged in as " + userAuthorization);
+                        break;
+                    }
+                }
+            }
+            if (checkUser) {
+                System.out.println("Username or password is incorrect. Please try again.");
+            }
+        }
+        return userAuthorization;
+    }
+
+    public static boolean checkTable(int table) {
+        System.out.println("Checking if there's table available...");
+        if (table != 0) {
+            table--;
+            System.out.println(table + " Table available.");
+            return true;
+        } else {
+            System.out.println("There's no table available.");
+            return false;
+        }
+
+    }
+
+    public static double chooseMenu(
+        Scanner input
+    ) {
         String[] menuTypes = {
             "Main Dish",
             "Side Dish", 
@@ -123,130 +261,15 @@ public class Kasir {
             { "Mint Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10] },
             { "Macha Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10] },
         };
-        String[][] user = {
-            { "fawwaz", "fawwaz" },
-            { "ekya", "ekya" },
-            { "raul", "raul" }
-        };
-        String[] availableBank = {
-            "Bank Mandiri",
-            "Bank Rakyat Indonesia (BRI)",
-            "Bank Central Asia (BCA)",
-            "Bank Negara Indonesia (BNI)",
-            "Bank Tabungan Negara (BTN)",
-            "Bank CIMB Niaga",
-            "Bank Danamon",
-            "Bank Syariah Indonesia (BSI)",
-            "Bank Permata",
-            "Bank OCBC NISP",
-            "Bank Panin"
-        };
-        String[] paymentType = {
-            "Cash",
-            "Debit Card"
-        };
-        String lineBreak = "=======================================";
-        int 
-            table = 2,
-            paymentId,
-            customer = 2;
-        double 
-            totalPrice,
-            todays_income = 0.0;
-
-        // Login with function
-        login(user);
-
-        // Check if there's table available.
-        for (int i = 1; i <= customer; i++) {
-            System.out.println("Customer " + customer);
-            System.out.println("Checking if there's table available...");
-            if (table != 0) {
-                table--;
-                System.out.println(table + " Table available.");
-                System.out.println(lineBreak);
-
-                // Choose menu with function
-                totalPrice = chooseMenu(menu, menuTypes, menuCategories);
-
-                // Choose payment type.
-                for (int j = 0; j < paymentType.length; j++) {
-                    System.out.println((j + 1) + ". " + paymentType[j]);
-                }
-                System.out.print("Input payment type ID : ");
-                paymentId = input.nextInt();
-
-                // Cash payment type.
-                if (paymentId == 1) {
-                    Cash(lineBreak, totalPrice, todays_income);
-
-                    // Debit payment type.
-                } else if (paymentId == 2) {
-                    Debit(availableBank, lineBreak, totalPrice, todays_income);
-
-                // Unavailable payment type.
-                } else {
-                    System.out.println(lineBreak);
-                    System.out.println("Please choose available payment type.");
-                    System.out.println(lineBreak);
-                }
-
-                // Table unavailable.
-            } else {
-                System.out.println("There's no table available.");
-                System.out.println(lineBreak);
-                break;
-            }
-            todays_income += totalPrice;
-            customer++;
-        }
-        System.out.println("Today's income is : Rp. " + todays_income);
-    }
-
-    public static void login(String[][] user) {
-
-        Scanner input = new Scanner(System.in);
-        boolean checkUser = true;
-        String username, password;
-
-        // Input username and password to login.
-        while (checkUser) {
-            System.out.println("Please login first.");
-            System.out.println("=======================================");
-            System.out.print("Username  : ");
-            username = input.next();
-            System.out.print("Password  : ");
-            password = input.next();
-            System.out.println("=======================================");
-            // Check if the username and password is correct.
-            for (int i = 0; i < user.length; i++) {
-                for (int j = 0; j < user[i].length; j++) {
-                    if (user[i][0].equals(username) && user[i][1].equals(password)) {
-                        checkUser = false;
-                    }
-                }
-            }
-            if (checkUser) {
-                System.out.println("Username or password is incorrect. Please try again.");
-                System.out.println("=======================================");
-            }
-        }
-    }
-
-    public static double chooseMenu(
-        String[][] menu, 
-        String[] menuTypes, 
-        String[] menuCategories
-    ) {
-        Scanner input = new Scanner(System.in);
         int menuIndex, menuTypesIndex;
         double totalPrice = 0.0;
         int amount;
         int[] index = new int[menu.length];
         String orderMore;  
         boolean 
-            checkMenuIndex = true, 
-            checkMenuTypesIndex = true;
+            checkMenuIndex, 
+            checkMenuTypesIndex,
+            isValidIndex;
 
         // Choose menu.
         while (true) {
@@ -262,6 +285,14 @@ public class Kasir {
                 System.out.printf("| %-3s| %-15s|%n", (i+1), menuTypes[i]);
             }
             menuTypeHorizontalGrid();
+
+            // Reset the available menu index
+            for (int i = 0; i < index.length; i++) {
+                index[i] = 0;
+            }
+
+            // Choose the menu type
+            checkMenuTypesIndex = true;
             while (checkMenuTypesIndex) {
                 System.out.print("Please choose your type : ");
                 menuTypesIndex = input.nextInt();
@@ -287,13 +318,14 @@ public class Kasir {
                 }
             }
 
-            // Choose a menu
+            // Choose the menu
+            checkMenuIndex = true;
             while (checkMenuIndex) {
                 System.out.print("Please choose your menu : ");
                 menuIndex = input.nextInt();
 
                 // Check if the input menuIndex is within the valid range
-                boolean isValidIndex = false;
+                isValidIndex = false;
                 for (int i = 0; i < index.length; i++) {
                     if (menuIndex == index[i]) {
                         isValidIndex = true;
@@ -303,13 +335,13 @@ public class Kasir {
 
                 // Check if the selected menuIndex is valid
                 if (isValidIndex) {
-                    System.out.println("=======================================");
                     System.out.println(menu[menuIndex-1][0] + " = " + menu[menuIndex-1][1]);
                     System.out.print("Total amount: ");
                     amount = input.nextInt();
                     totalPrice += Integer.parseInt(menu[menuIndex-1][2]) * amount;
                     System.out.println("Total Price : Rp. " + totalPrice);
                     System.out.println("=======================================");
+                    break;
                 } else {
                     System.out.println("Please choose the available menus.");
                 } 
@@ -356,13 +388,61 @@ public class Kasir {
         System.out.printf("|%-4s|%-16s|%n", "----", "----------------");
     }
 
-    public static double Debit(
-        String[] availableBank, 
-        String lineBreak, 
-        double totalPrice, 
-        double todays_income
+    public static void Payment(
+        Scanner input,
+        double totalPrice,
+        double todaysIncome
     ) {
-        Scanner input = new Scanner(System.in);
+        String[] paymentType = {
+            "Cash",
+            "Debit Card"
+        };
+        int paymentId;
+
+        // Choose payment type.
+        for (int j = 0; j < paymentType.length; j++) {
+            System.out.println((j + 1) + ". " + paymentType[j]);
+        }
+        System.out.print("Input payment type ID : ");
+        paymentId = input.nextInt();
+
+        while (true) {
+            // Cash payment type.
+            if (paymentId == 1) {
+                Cash(input, totalPrice, todaysIncome);
+                break;
+            } 
+            // Debit payment type.
+            else if (paymentId == 2) {
+                Debit(input, totalPrice, todaysIncome);
+                break;
+            } 
+            // Unavailable payment type.
+            else {
+                System.out.println("Please choose available payment type.");
+                continue;
+            }
+        }
+    }
+
+    public static double Debit(
+        Scanner input,
+        double totalPrice, 
+        double todaysIncome
+    ) {        
+        String[] availableBank = {
+            "Bank Mandiri",
+            "Bank Rakyat Indonesia (BRI)",
+            "Bank Central Asia (BCA)",
+            "Bank Negara Indonesia (BNI)",
+            "Bank Tabungan Negara (BTN)",
+            "Bank CIMB Niaga",
+            "Bank Danamon",
+            "Bank Syariah Indonesia (BSI)",
+            "Bank Permata",
+            "Bank OCBC NISP",
+            "Bank Panin"
+        };
         int bankId;
         boolean checkBank = true;
 
@@ -375,37 +455,36 @@ public class Kasir {
             bankId = input.nextInt();
             for (int j = 0; j < availableBank.length; j++) {
                 if (bankId == (j+1)) {
-                    System.out.println(lineBreak);
+                    
                     System.out.println("Bank        : " + availableBank[j]);
                     System.out.println("Total price : " + totalPrice);
                     System.out.println("Printing receipt...");
                     System.out.println("Thanks for the purchase!");
-                    System.out.println(lineBreak);
+                    
                     checkBank = false; 
-                    todays_income += totalPrice;
+                    todaysIncome += totalPrice;
                     totalPrice = 0.0;
                 }
 
             // Bank unavailable.
             }
             if (bankId >= availableBank.length) {
-                System.out.println(lineBreak);
+                
                 System.out.println("Please choose available bank.");
-                System.out.println(lineBreak);
+                
             }
         }
-        return todays_income;
+        return todaysIncome;
     }
 
     public static double Cash(
-        String lineBreak, 
+        Scanner input,
         double totalPrice, 
-        double todays_income
+        double todaysIncome
     ) {
-        Scanner input = new Scanner(System.in);
         double paymentAmount, change;
 
-        System.out.println(lineBreak);
+        
         System.out.println("Total price           : " + totalPrice);
         System.out.print("Input payment nominal : ");
         paymentAmount = input.nextInt();
@@ -413,18 +492,18 @@ public class Kasir {
 
         // Print the receipt.
         while (paymentAmount - totalPrice < 0) {
-            System.out.println(lineBreak);
+            
             System.out.println("Please input the correct nominal.");
-            System.out.println(lineBreak);
+            
         }
         System.out.println("Change                : " + change);
-        System.out.println(lineBreak);
+        
         System.out.println("Printing receipt...");
         System.out.println("Thanks for the purchase!");
-        System.out.println(lineBreak);
-        todays_income += totalPrice;
+        
+        todaysIncome += totalPrice;
         totalPrice = 0.0;
 
-        return todays_income;
+        return todaysIncome;
     }
 }
