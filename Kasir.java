@@ -250,6 +250,11 @@ public class Kasir {
 
         // Choose menu.
         while (true) {
+            System.out.println("                --------- Happy Christmas!!! ---------                ");
+            System.out.println("Get your discount by spending Rp. 500.000 or more in this restaurant.");
+            System.out.println("This discount will reduce your cost by 20%, so Happy Chrimast everybody! :D");
+            System.out.println("=======================================");
+            System.out.println();
             menuTypeHorizontalGrid();
             System.out.printf("| %-3s| %-15s|%n", "ID", "Menu Type");
             menuTypeHorizontalGrid();
@@ -305,7 +310,6 @@ public class Kasir {
                     totalPrice += Integer.parseInt(menu[menuIndex-1][2]) * amount;
                     System.out.println("Total Price : Rp. " + totalPrice);
                     System.out.println("=======================================");
-                    break;
                 } else {
                     System.out.println("Please choose the available menus.");
                 } 
@@ -313,11 +317,21 @@ public class Kasir {
 
             // Choose to order more or not.
             while (true) {
-                System.out.println("Do you want to order more? (y/n)");
-                System.out.print("Your answer : ");
+                System.out.print("Do you want to order more? (y/n) : ");
                 orderMore = input.next();
 
                 if (orderMore.equalsIgnoreCase("n")) {
+                    double 
+                        discount=0,
+                        beforeDis = totalPrice;
+                    if (totalPrice>500000) {
+                        discount = beforeDis * 0.2;
+                        totalPrice = beforeDis - discount;
+                        System.out.println("Congratulation for your discount!");
+                        System.out.println("Total price : Rp. " + totalPrice);
+                        System.out.println("You save Rp. " + (beforeDis - totalPrice) + " of your money");
+                        System.out.println("=======================================");
+                    } 
                     System.out.println("Please choose payment type.");
                     break;
                 } else if (orderMore.equalsIgnoreCase("y")) {
@@ -335,7 +349,7 @@ public class Kasir {
     }
 
     public static void menuHorizontalGrid() {
-        System.out.printf("|%-4s|%-46s|%-21s|%-21s|%n", "----", "----------------------------------------------", "---------------------", "---------------------");
+        System.out.printf("+%-4s+%-46s+%-21s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "---------------------");
     }
 
     public static void menuTypeHorizontalGrid() {
