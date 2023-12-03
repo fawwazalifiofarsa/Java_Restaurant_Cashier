@@ -261,9 +261,10 @@ public class Kasir {
             { "Mint Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10] },
             { "Macha Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10] },
         };
+
         int menuIndex, menuTypesIndex;
         double totalPrice = 0.0;
-        int amount;
+        int amount,diningOptions = 0;
         int[] index = new int[menu.length];
         String orderMore;  
         boolean 
@@ -278,6 +279,21 @@ public class Kasir {
             System.out.println("This discount will reduce your cost by 20%, so Happy Chrimast everybody! :D");
             System.out.println("=======================================");
             System.out.println();
+
+            // Choose Dining option.
+            while (diningOptions != 1 && diningOptions != 2){
+            System.out.println("Select a dining option.\n1. Dine-in.\n2. Take away.");
+            diningOptions = input.nextInt();
+
+                if (diningOptions != 1 && diningOptions != 2){
+                    System.out.println("Please Select Between 1 or 2.");
+                } else if (diningOptions == 1) {
+                    System.out.println("Dine-in option selected\n");
+                } else {
+                    System.out.println("Take-away option selected\n");
+                }
+            }
+
             menuTypeHorizontalGrid();
             System.out.printf("| %-3s| %-15s|%n", "ID", "Menu Type");
             menuTypeHorizontalGrid();
