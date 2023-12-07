@@ -18,78 +18,40 @@ public class Kasir {
         };
         String 
             userAuthorization = null;
-        int
-            table = 2,
-            customer = 1,
-            inputAction;
 
         // Login with function
         userAuthorization = login(input, user, userAuthorization);
         if (userAuthorization == roles[0]) {
-            System.out.println("1. Process Transaction");
-            System.out.println("2. Input Tables");
-            System.out.println("3. View Sales Reports");
-            System.out.println("Select your action : ");
-            inputAction = input.nextInt();
-            switch (inputAction) {
-                case 1:
-                    ProcessTransaction(input, customer, table);
-                    break;
-            
-                default:
-                    break;
-            }
+            cashierActions(input);
+        } else if (userAuthorization == roles[1]) {
+            System.out.println("(ERROR) No available action.");
+        } else if (userAuthorization == roles[2]) {
+            System.out.println("(ERROR) No available action.");
         }
     }
     
     // Functions Initialization
 
-    public static void ProcessTransaction(
-        Scanner input,
-        int customer,
-        int table
+    public static void cashierActions (
+        Scanner input
     ) {
-        String
-            confirmAnotherTransaction;
-        double 
-            totalPrice,
-            todaysIncome = 0.0;
-        boolean
-            checkTable;
-        while (true) {
-            // Check if there's table available.
-            checkTable = checkTable(table);
-            System.out.println("Customer " + customer);
-            if (checkTable) {
-                
-                // Choose menu with function
-                totalPrice = chooseMenu(input);
+        int
+            table = 2,
+            customer = 1,
+            inputAction;
 
-                // Choose payment type.
-                Payment(input, totalPrice, todaysIncome);
-
-                todaysIncome += totalPrice;
-                customer++;
-
-                System.out.print("Do you want to add another transaction? (y/n) : ");
-                while (true) {
-                    confirmAnotherTransaction = input.next();
-                    if (confirmAnotherTransaction.equalsIgnoreCase("y")) {
-                        ProcessTransaction(input, customer, table);
-                    } else if (confirmAnotherTransaction.equalsIgnoreCase("n")) {
-                        System.out.println("Total customers : " + customer);
-                        System.out.println("Today's income is : Rp. " + todaysIncome);
-                        break;
-                    } else {
-                        System.out.print("Please choose the available options (y/n) : ");
-                        continue;
-                    }
-                }
+        System.out.println("1. Process Transaction");
+        System.out.println("2. Input Tables");
+        System.out.println("3. View Sales Reports");
+        System.out.print("Select your action : ");
+        inputAction = input.nextInt();
+        switch (inputAction) {
+            case 1:
+                processTransaction(input, customer, table);
                 break;
-            } else {
-                System.out.println("There's no available table.");
+        
+            default:
                 break;
-            }
         }
     }
 
@@ -127,6 +89,103 @@ public class Kasir {
         return userAuthorization;
     }
 
+    public static void processTransaction(
+        Scanner input,
+        int customer,
+        int table
+    ) {
+        String
+            confirmAnotherTransaction,
+            diningOption;
+        double 
+            totalPrice,
+            todaysIncome = 0.0;
+        boolean
+            checkTable = true;
+        while (true) {
+            diningOption = selectDiningOption(input);
+            if (diningOption.equals("Dine-in")) {
+
+                // Check if there's table available for dine-in.
+                checkTable = checkTable(table);
+            }
+
+            System.out.println("Customer " + customer);
+            if (checkTable) {
+                
+                // select menu with function
+                totalPrice = selectMenu(input);
+
+                // select payment type.
+                Payment(input, totalPrice, todaysIncome);
+
+                todaysIncome += totalPrice;
+                customer++;
+
+                System.out.print("Do you want to add another transaction? (y/n) : ");
+                while (true) {
+                    confirmAnotherTransaction = input.next();
+                    if (confirmAnotherTransaction.equalsIgnoreCase("y")) {
+                        processTransaction(input, customer, table);
+                    } else if (confirmAnotherTransaction.equalsIgnoreCase("n")) {
+                        System.out.println("Total customers : " + customer);
+                        System.out.println("Today's income is : Rp. " + todaysIncome);
+                        break;
+                    } else {
+                        System.out.print("Please select the available options (y/n) : ");
+                        continue;
+                    }
+                }
+                break;
+            } else {
+                System.out.println("There's no available table.");
+                break;
+            }
+        }
+    }
+
+    public static String selectDiningOption(
+        Scanner input
+    ) {
+        String[] diningOptions = {
+            "Dine-in",
+            "Takeaway"
+        };
+        String selectedDiningOptions = "";
+        int index;
+        boolean checkDiningOptionsIndex;
+
+        diningOptionsHorizontalGrid();
+        System.out.printf("| %-3s| %-15s|%n", "ID", "Dining Option");
+        diningOptionsHorizontalGrid();
+        for (int i = 0; i < diningOptions.length; i++) {
+            System.out.printf("| %-3s| %-15s|%n", (i+1), diningOptions[i]);
+        }
+        diningOptionsHorizontalGrid();
+        System.out.printf("| %-20s|%n", "0. Back");
+        System.out.printf("|%-21s|%n", "---------------------");
+        
+        checkDiningOptionsIndex = true;
+        while (checkDiningOptionsIndex) {
+            System.out.print("Select your option : ");
+            index = input.nextInt();
+            if (index > diningOptions.length) {
+                System.out.println("Please select the available option.");
+                continue;
+            } else if (index == 0) {
+                cashierActions(input);
+            } else {
+                selectedDiningOptions = diningOptions[index-1];
+                checkDiningOptionsIndex = false;
+            }
+        }
+        return selectedDiningOptions;
+    }
+    
+    public static void diningOptionsHorizontalGrid() {
+        System.out.printf("|%-4s|%-16s|%n", "----", "----------------");
+    }
+
     public static boolean checkTable(int table) {
         System.out.println("Checking if there's table available...");
         if (table != 0) {
@@ -140,7 +199,7 @@ public class Kasir {
 
     }
 
-    public static double chooseMenu(
+    public static double selectMenu(
         Scanner input
     ) {
         String[] menuTypes = {
@@ -261,10 +320,9 @@ public class Kasir {
             { "Mint Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10] },
             { "Macha Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10] },
         };
-
         int menuIndex, menuTypesIndex;
         double totalPrice = 0.0;
-        int amount,diningOptions = 0;
+        int amount;
         int[] index = new int[menu.length];
         String orderMore;  
         boolean 
@@ -272,28 +330,8 @@ public class Kasir {
             checkMenuTypesIndex,
             isValidIndex;
 
-        // Choose menu.
+        // select menu.
         while (true) {
-            System.out.println("                --------- Happy Christmas!!! ---------                ");
-            System.out.println("Get your discount by spending Rp. 500.000 or more in this restaurant.");
-            System.out.println("This discount will reduce your cost by 20%, so Happy Chrimast everybody! :D");
-            System.out.println("=======================================");
-            System.out.println();
-
-            // Choose Dining option.
-            while (diningOptions != 1 && diningOptions != 2){
-            System.out.println("Select a dining option.\n1. Dine-in.\n2. Take away.");
-            diningOptions = input.nextInt();
-
-                if (diningOptions != 1 && diningOptions != 2){
-                    System.out.println("Please Select Between 1 or 2.");
-                } else if (diningOptions == 1) {
-                    System.out.println("Dine-in option selected\n");
-                } else {
-                    System.out.println("Take-away option selected\n");
-                }
-            }
-
             menuTypeHorizontalGrid();
             System.out.printf("| %-3s| %-15s|%n", "ID", "Menu Type");
             menuTypeHorizontalGrid();
@@ -301,22 +339,23 @@ public class Kasir {
                 System.out.printf("| %-3s| %-15s|%n", (i+1), menuTypes[i]);
             }
             menuTypeHorizontalGrid();
+            System.out.printf("| %-20s|%n", "0. Back");
+            System.out.printf("|%-21s|%n", "---------------------");
 
             // Reset the available menu index
             for (int i = 0; i < index.length; i++) {
                 index[i] = 0;
             }
 
-            // Choose the menu type
+            // select the menu type
             checkMenuTypesIndex = true;
             while (checkMenuTypesIndex) {
-                System.out.print("Please choose your type : ");
+                System.out.print("Please select your type : ");
                 menuTypesIndex = input.nextInt();
                 if (menuTypesIndex > menuTypes.length) {
-                    System.out.println("Please choose available type.");
+                    System.out.println("Please select available type.");
                     continue;
                 } else {
-                    System.out.println("0. Back");
                     int validIndexCount = 0;
                     menuHorizontalGrid();
                     System.out.printf("| %-3s| %-45s| %-20s| %-20s|%n", "ID", "Menu Item", "Category", "Price");
@@ -330,14 +369,16 @@ public class Kasir {
                         }
                     }
                     menuHorizontalGrid();
+
+                    System.out.printf(" | %-92s|%n", "0. Back");
                     checkMenuTypesIndex = false;
                 }
             }
 
-            // Choose the menu
+            // select the menu
             checkMenuIndex = true;
             while (checkMenuIndex) {
-                System.out.print("Please choose your menu : ");
+                System.out.print("Please select your menu : ");
                 menuIndex = input.nextInt();
 
                 // Check if the input menuIndex is within the valid range
@@ -356,34 +397,22 @@ public class Kasir {
                     amount = input.nextInt();
                     totalPrice += Integer.parseInt(menu[menuIndex-1][2]) * amount;
                     System.out.println("Total Price : Rp. " + totalPrice);
-                    System.out.println("=======================================");
                     break;
                 } else {
-                    System.out.println("Please choose the available menus.");
+                    System.out.println("Please select the available menus.");
                 } 
             }
 
-            // Choose to order more or not.
+            // select to order more or not.
             while (true) {
                 System.out.print("Do you want to order more? (y/n) : ");
                 orderMore = input.next();
 
                 if (orderMore.equalsIgnoreCase("n")) {
-                    double 
-                        discount=0,
-                        beforeDis = totalPrice;
-                    if (totalPrice>500000) {
-                        discount = beforeDis * 0.2;
-                        totalPrice = beforeDis - discount;
-                        System.out.println("Congratulation for your discount!");
-                        System.out.println("Total price : Rp. " + totalPrice);
-                        System.out.println("You save Rp. " + (beforeDis - totalPrice) + " of your money");
-                        System.out.println("=======================================");
-                    } 
-                    System.out.println("Please choose payment type.");
+                    System.out.println("Please select payment type.");
                     break;
                 } else if (orderMore.equalsIgnoreCase("y")) {
-                    System.out.println("Please choose your menu : ");
+                    System.out.println("Please select your menu : ");
                     break;
                 } else {
                     System.out.println("Please answer (y/n)");
@@ -397,7 +426,7 @@ public class Kasir {
     }
 
     public static void menuHorizontalGrid() {
-        System.out.printf("+%-4s+%-46s+%-21s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "---------------------");
+        System.out.printf("|%-4s|%-46s|%-21s|%-21s|%n", "----", "----------------------------------------------", "---------------------", "---------------------");
     }
 
     public static void menuTypeHorizontalGrid() {
@@ -415,7 +444,7 @@ public class Kasir {
         };
         int paymentId;
 
-        // Choose payment type.
+        // select payment type.
         for (int j = 0; j < paymentType.length; j++) {
             System.out.println((j + 1) + ". " + paymentType[j]);
         }
@@ -435,7 +464,7 @@ public class Kasir {
             } 
             // Unavailable payment type.
             else {
-                System.out.println("Please choose available payment type.");
+                System.out.println("Please select available payment type.");
                 continue;
             }
         }
@@ -486,7 +515,7 @@ public class Kasir {
             }
             if (bankId >= availableBank.length) {
                 
-                System.out.println("Please choose available bank.");
+                System.out.println("Please select available bank.");
                 
             }
         }
