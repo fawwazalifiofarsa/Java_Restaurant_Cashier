@@ -35,6 +35,7 @@ public class Kasir {
     public static void cashierActions (
         Scanner input
     ) {
+<<<<<<< HEAD
         int
             table = 2,
             customer = 1,
@@ -48,6 +49,45 @@ public class Kasir {
         switch (inputAction) {
             case 1:
                 processTransaction(input, customer, table);
+=======
+        String
+            confirmAnotherTransaction;
+        double 
+            totalPrice,
+            todaysIncome = 0.0;
+        boolean
+            checkTable;
+        String [][] chooseMenu = chooseMenu(input);
+        while (true) {
+            // Check if there's table available.
+            checkTable = checkTable(table);
+            System.out.println("Customer " + customer);
+            if (checkTable) {
+                
+                // Choose menu with function
+                totalPrice = Double.parseDouble(chooseMenu[0][4]);
+
+                // Choose payment type.
+                Payment(chooseMenu, input, totalPrice, todaysIncome);
+
+                todaysIncome += totalPrice;
+                customer++;
+
+                System.out.print("Do you want to add another transaction? (y/n) : ");
+                while (true) {
+                    confirmAnotherTransaction = input.next();
+                    if (confirmAnotherTransaction.equalsIgnoreCase("y")) {
+                        ProcessTransaction(input, customer, table);
+                    } else if (confirmAnotherTransaction.equalsIgnoreCase("n")) {
+                        System.out.println("Total customers : " + customer);
+                        System.out.println("Today's income is : Rp. " + todaysIncome);
+                        break;
+                    } else {
+                        System.out.print("Please choose the available options (y/n) : ");
+                        continue;
+                    }
+                }
+>>>>>>> d570db2ba76f09878aa4f424b8d0868f0d82522c
                 break;
         
             default:
@@ -196,10 +236,13 @@ public class Kasir {
             System.out.println("There's no table available.");
             return false;
         }
-
     }
 
+<<<<<<< HEAD
     public static double selectMenu(
+=======
+    public static String [][] chooseMenu(
+>>>>>>> d570db2ba76f09878aa4f424b8d0868f0d82522c
         Scanner input
     ) {
         String[] menuTypes = {
@@ -320,9 +363,18 @@ public class Kasir {
             { "Mint Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10] },
             { "Macha Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10] },
         };
+<<<<<<< HEAD
         int menuIndex, menuTypesIndex;
         double totalPrice = 0.0;
         int amount;
+=======
+
+        int menuIndex = 0, menuTypesIndex = 0, counter = 0;
+        double totalPrice = 0.0, discount = 0, pricePerMenu = 0, beforeDis = 0;
+        int amount = 0 ,diningOptions = 0;
+        int [][] choseMemory = new int [99][2];
+        double [][] totalPricePerMenuSave = new double [99][2];
+>>>>>>> d570db2ba76f09878aa4f424b8d0868f0d82522c
         int[] index = new int[menu.length];
         String orderMore;  
         boolean 
@@ -395,6 +447,7 @@ public class Kasir {
                     System.out.println(menu[menuIndex-1][0] + " = " + menu[menuIndex-1][1]);
                     System.out.print("Total amount: ");
                     amount = input.nextInt();
+                    pricePerMenu = Integer.parseInt(menu[menuIndex-1][2]) * amount;
                     totalPrice += Integer.parseInt(menu[menuIndex-1][2]) * amount;
                     System.out.println("Total Price : Rp. " + totalPrice);
                     break;
@@ -409,7 +462,20 @@ public class Kasir {
                 orderMore = input.next();
 
                 if (orderMore.equalsIgnoreCase("n")) {
+<<<<<<< HEAD
                     System.out.println("Please select payment type.");
+=======
+                    beforeDis = totalPrice;
+                    if (totalPrice>500000) {
+                        discount = beforeDis * 0.2;
+                        totalPrice = beforeDis - discount;
+                        System.out.println("Congratulation for your discount!");
+                        System.out.println("Total price : Rp. " + totalPrice);
+                        System.out.println("You save Rp. " + (beforeDis - totalPrice) + " of your money");
+                        System.out.println("=======================================");
+                    } 
+                    System.out.println("Please choose payment type.");
+>>>>>>> d570db2ba76f09878aa4f424b8d0868f0d82522c
                     break;
                 } else if (orderMore.equalsIgnoreCase("y")) {
                     System.out.println("Please select your menu : ");
@@ -421,8 +487,20 @@ public class Kasir {
             if (orderMore.equalsIgnoreCase("n")) {
                 break;
             }
-        }
-        return totalPrice;
+
+            // This is index data for the receipt
+            choseMemory[counter][0] = menuIndex - 1;
+            choseMemory[counter][1] = amount;
+
+            totalPricePerMenuSave[counter][0] = pricePerMenu;
+            totalPricePerMenuSave[counter][1] = totalPrice;
+
+            counter++;
+            }
+
+        String [][] dataForReceipt = dataForReceipt(menu, choseMemory, totalPricePerMenuSave, totalPrice, counter, discount, beforeDis);
+
+        return dataForReceipt;
     }
 
     public static void menuHorizontalGrid() {
@@ -434,6 +512,7 @@ public class Kasir {
     }
 
     public static void Payment(
+        String [][] chooseMenu,
         Scanner input,
         double totalPrice,
         double todaysIncome
@@ -454,12 +533,12 @@ public class Kasir {
         while (true) {
             // Cash payment type.
             if (paymentId == 1) {
-                Cash(input, totalPrice, todaysIncome);
+                Cash(chooseMenu, input, totalPrice, todaysIncome);
                 break;
             } 
             // Debit payment type.
             else if (paymentId == 2) {
-                Debit(input, totalPrice, todaysIncome);
+                Debit(chooseMenu, input, totalPrice, todaysIncome);
                 break;
             } 
             // Unavailable payment type.
@@ -471,6 +550,7 @@ public class Kasir {
     }
 
     public static double Debit(
+        String [][] chooseMenu,
         Scanner input,
         double totalPrice, 
         double todaysIncome
@@ -490,6 +570,7 @@ public class Kasir {
         };
         int bankId;
         boolean checkBank = true;
+        String [][] theReceiptData = chooseMenu;
 
         // Display available banks.
         for (int j = 0; j < availableBank.length; j++) {
@@ -504,6 +585,7 @@ public class Kasir {
                     System.out.println("Bank        : " + availableBank[j]);
                     System.out.println("Total price : " + totalPrice);
                     System.out.println("Printing receipt...");
+                    printReceipt(theReceiptData);
                     System.out.println("Thanks for the purchase!");
                     
                     checkBank = false; 
@@ -523,12 +605,13 @@ public class Kasir {
     }
 
     public static double Cash(
+        String [][] chooseMenu,
         Scanner input,
         double totalPrice, 
         double todaysIncome
     ) {
         double paymentAmount, change;
-
+        String [][] theReceiptData = chooseMenu;
         
         System.out.println("Total price           : " + totalPrice);
         System.out.print("Input payment nominal : ");
@@ -544,11 +627,58 @@ public class Kasir {
         System.out.println("Change                : " + change);
         
         System.out.println("Printing receipt...");
+        printReceipt(theReceiptData);
         System.out.println("Thanks for the purchase!");
         
         todaysIncome += totalPrice;
         totalPrice = 0.0;
 
         return todaysIncome;
+    }
+
+    // This is the data for the receipt
+        public static String[][] dataForReceipt (
+            String[][] menu, 
+            int[][] choseMemory,
+            double[][] totalPricePerMenuSave,
+            double totalPrice,
+            int counter,
+            double discount,
+            double beforeDis
+            ){
+        String[][] theReceiptData = new String[counter + 1][7];
+
+        for (int i = 0; i <= counter; i++) {
+            theReceiptData[i][0] = String.valueOf(totalPricePerMenuSave[i][0]);
+            theReceiptData[i][1] = String.valueOf(choseMemory[i][1]);
+            theReceiptData[i][2] = menu[choseMemory[i][0]][0];
+            theReceiptData[i][3] = menu[choseMemory[i][0]][1];
+            theReceiptData[i][4] = String.valueOf(totalPrice);
+            theReceiptData[i][5] = String.valueOf(discount);
+            theReceiptData[i][6] = String.valueOf(beforeDis);
+        }
+    
+        return theReceiptData;
+    }
+
+    // This is the design of the receipt
+    public static void printReceipt (String [][] theReceiptData) {
+        receiptHorizontalGrid();
+        System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", "No", "Menu Item", "Price", "Amount", "Total Price");
+        receiptHorizontalGrid();
+        for (int i = 0; i < theReceiptData.length; i++) {
+            System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", i + 1, theReceiptData[i][2], theReceiptData[i][3], theReceiptData[i][1] , theReceiptData[i][0]);
+        }
+        receiptHorizontalGrid();
+        System.out.printf("| %-83s| %-20s|%n", "Price", theReceiptData[0][6]);
+        System.out.printf("|%-4s %-46s %-21s %-10s|%-21s|%n", "    ", "                  ", "      ", "    ", "      ");
+        System.out.printf("| %-83s| %-20s|%n", "Discount", theReceiptData[0][5]);
+        System.out.printf("|%-4s %-46s %-21s %-10s+%-21s+%n", " ", " ", "  ", "  ", "---------------------");
+        System.out.printf("| %-83s| %-20s|%n", "Total Price", theReceiptData[0][4]);
+        System.out.printf("+%-4s-%-46s-%-21s-%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
+    }
+
+    public static void receiptHorizontalGrid () {
+        System.out.printf("+%-4s+%-46s+%-21s+%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
     }
 }
