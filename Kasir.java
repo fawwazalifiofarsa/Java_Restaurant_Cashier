@@ -1,10 +1,132 @@
 package Java_Restaurant_Cashier;
 import java.util.Scanner;
 public class Kasir {
+
+    static Scanner input = new Scanner(System.in);
+    
+    static String[][] receiptData = new String[99][4];
+    static String[] menuTypes = {
+            "Main Dish",
+            "Side Dish",
+            "Beverages",
+            "Dessert"
+    };
+    static String[] menuCategories = {
+            "Fried Rice",
+            "Fried Chicken",
+            "Hamburger",
+            "Pasta",
+            "Appetizer",
+            "Juice",
+            "Milkshake",
+            "Tea",
+            "Mineral Water",
+            "Salad",
+            "Ice Cream"
+    };
+    static String[][] menu = {
+
+            // Main Dish - Fried Rice Pax
+            { "Original Fried Rice", "Rp. 12,000", "12000", menuTypes[0], menuCategories[0],"12"},
+            { "Javanese Fried Rice", "Rp. 15,000", "15000", menuTypes[0], menuCategories[0],"21"},
+            { "Seafood Fried Rice", "Rp. 17,000", "17000", menuTypes[0], menuCategories[0],"19" },
+            { "Goat Fried Rice", "Rp. 20,000", "20000", menuTypes[0], menuCategories[0],"24" },
+            { "Crazy Fried Rice", "Rp. 17,000", "17000", menuTypes[0], menuCategories[0],"25" },
+            { "Sausage Fried Rice", "Rp. 15,000", "15000", menuTypes[0], menuCategories[0],"36" },
+            { "MeatBall Fried Rice", "Rp. 15,000", "15000", menuTypes[0], menuCategories[0],"47" },
+            { "Chicken Fried Rice", "Rp. 15,000", "15000", menuTypes[0], menuCategories[0],"58" },
+            { "Pete Fried Rice", "Rp. 15,000", "15000", menuTypes[0], menuCategories[0],"12" },
+            { "Babat Fried Rice", "Rp. 20,000", "20000", menuTypes[0], menuCategories[0],"10" },
+            { "Special Fried Rice", "Rp. 25,000", "25000", menuTypes[0], menuCategories[0],"15" },
+
+            // Main Dish - Fried Chicken Pax
+            { "Fried Chicken Original", "Rp. 22,000", "22000", menuTypes[0], menuCategories[1],"10" },
+            { "Fried Chicken Mentai", "Rp. 25,000", "25000", menuTypes[0], menuCategories[1],"15" },
+            { "Fried Chicken BBQ", "Rp. 25,000", "25000", menuTypes[0], menuCategories[1],"13" },
+            { "Fried Chicken Teriyaki", "Rp. 25,000", "25000", menuTypes[0], menuCategories[1],"11" },
+            { "Fried Chicken Spicy", "Rp. 22,000", "22000", menuTypes[0], menuCategories[1],"12" },
+            { "Fried Chicken Salted Egg", "Rp. 25,000", "25000", menuTypes[0], menuCategories[1],"25" },
+            { "Fried Chicken Black Pepper", "Rp. 25,000", "25000", menuTypes[0], menuCategories[1],"26" },
+
+            // Main Dish - Hamburger Pax
+            { "Classic Beef Burger", "Rp. 15,000", "15000", menuTypes[0], menuCategories[2],"19" },
+            { "Fish Fillet Burger", "Rp. 15,000", "15000", menuTypes[0], menuCategories[2],"15" },
+            { "Cheese Burger", "Rp. 17,000", "17000", menuTypes[0], menuCategories[2],"13" },
+            { "Double Cheese Burger", "Rp. 20,000", "20000", menuTypes[0], menuCategories[2],"12" },
+            { "Mushroom Swiss Burger", "Rp. 22,000", "22000", menuTypes[0], menuCategories[2],"32" },
+            { "Mozzarella Cheese Burger", "Rp. 25,000", "25000", menuTypes[0], menuCategories[2],"24" },
+            { "BBQ Beef Burger", "Rp. 22,000", "22000", menuTypes[0], menuCategories[2],"15" },
+
+            // Main Dish - Pasta Pax
+            { "Lasagne", "Rp. 15,000", "15000", menuTypes[0], menuCategories[3],"21" },
+            { "Spaghetti in Tomato Sauce", "Rp. 15,000", "15000", menuTypes[0], menuCategories[3],"17" },
+            { "Chicken and Linguini", "Rp. 15,000", "15000", menuTypes[0], menuCategories[3],"28" },
+            { "Pasta and Tomato Sauce", "Rp. 12,000", "12000", menuTypes[0], menuCategories[3],"15" },
+
+            // Side Dish - Appetizer
+            { "Dimsum", "Rp. 3,500/pcs", "3500", menuTypes[1], menuCategories[4],"10" },
+            { "Dumpling", "Rp. 3,500/pcs", "3500", menuTypes[1], menuCategories[4],"11" },
+            { "Bakwan", "Rp. 2,000/pcs", "2000", menuTypes[1], menuCategories[4],"22" },
+            { "Pempek", "Rp. 10,000/portion", "10000", menuTypes[1], menuCategories[4],"33" },
+            { "Mendoan", "Rp. 3,000/pcs", "3000", menuTypes[1], menuCategories[4],"20" },
+            { "French Fries Large", "Rp. 10,000", "10000", menuTypes[1], menuCategories[4],"5" },
+            { "French Fries Medium", "Rp. 8,000", "8000", menuTypes[1], menuCategories[4],"10" },
+            { "French Fries Small", "Rp. 5,000", "5000", menuTypes[1], menuCategories[4],"21" },
+            { "Potato Chip", "Rp. 10,000/portion", "10000", menuTypes[1], menuCategories[4],"11" },
+            { "Fried Tofu", "Rp. 2,000/pcs", "2000", menuTypes[1], menuCategories[4],"10" },
+            { "Macaroni", "Rp. 10,000/portion", "10000", menuTypes[1], menuCategories[4],"20" },
+            { "Waffle", "Rp. 10,000/portion", "10000", menuTypes[1], menuCategories[4],"31" },
+            { "Egg (Sunny Side Up/Omelet/half boiled egg)", "Rp. 5,000/pcs", "5000", menuTypes[1], menuCategories[4],"12" },
+            { "Rice", "Rp. 3,000/portion", "3000", menuTypes[1], menuCategories[4],"23" },
+
+            // Beverage - Juice
+            { "Apple Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5],"30" },
+            { "Mango Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5],"31" },
+            { "Avocado Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5],"45" },
+            { "Strawberry Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5],"26" },
+            { "Orange Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5],"17" },
+            { "Pineapple Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5],"12" },
+            { "Beetroot Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5],"7" },
+            { "Tomato Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5],"9" },
+            { "Grapefruit Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5],"15" },
+            { "Watermelon Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5],"20" },
+
+            // Beverage - Milkshake
+            { "Vanilla Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6],"14" },
+            { "Chocolate Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6],"25" },
+            { "Strawberry Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6],"36" },
+            { "Banana Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6],"17" },
+            { "Mango Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6],"23" },
+            { "Caramel Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6],"14" },
+            { "Coconut Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6],"20" },
+            { "Oreo Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6],"16" },
+            { "Milo Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6],"10" },
+
+            // Beverage - Tea
+            { "Iced Tea", "Rp. 8,000", "8000", menuTypes[2], menuCategories[7],"13" },
+            { "Hot Tea", "Rp. 8,000", "8000", menuTypes[2], menuCategories[7],"24" },
+            { "Black Tea", "Rp. 10,000", "10000", menuTypes[2], menuCategories[7],"25" },
+            { "Green Tea", "Rp. 10,000", "10000", menuTypes[2], menuCategories[7],"36" },
+
+            // Beverage - Mineral Water
+            { "Mineral Water", "Rp. 5,000", "5000", menuTypes[2], menuCategories[8],"107" },
+
+            // Dessert - Salad
+            { "Salad", "Rp. 10,000", "10000", menuTypes[3], menuCategories[9],"15" },
+
+            // Dessert - Ice Cream
+            { "Vanilla Ice Cream", "Rp. 10,000", "10000", menuTypes[3], menuCategories[10],"19" },
+            { "Chocolate Ice Cream", "Rp. 10,000", "10000", menuTypes[3], menuCategories[10],"20" },
+            { "Strawberry Ice Cream", "Rp. 10,000", "10000", menuTypes[3], menuCategories[10],"31" },
+            { "Caramel Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10],"21" },
+            { "Mocha Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10],"32" },
+            { "Mint Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10],"24" },
+            { "Macha Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10],"13" },
+    };
+
     public static void main(String[] args) {
 
         // Variables declaration.
-        Scanner input = new Scanner(System.in);
 
         String[] roles = {
             "Cashier",
@@ -20,9 +142,9 @@ public class Kasir {
             userAuthorization = null;
 
         // Login with function
-        userAuthorization = login(input, user, userAuthorization);
+        userAuthorization = login(user, userAuthorization);
         if (userAuthorization == roles[0]) {
-            cashierActions(input);
+            cashierActions();
         } else if (userAuthorization == roles[1]) {
             System.out.println("(ERROR) No available action.");
         } else if (userAuthorization == roles[2]) {
@@ -33,7 +155,6 @@ public class Kasir {
     // Functions Initialization
 
     public static void cashierActions (
-        Scanner input
     ) {
         int
             table = 2,
@@ -47,7 +168,7 @@ public class Kasir {
         inputAction = input.nextInt();
         switch (inputAction) {
             case 1:
-                processTransaction(input, customer, table);
+                processTransaction(customer, table);
                 break;
         
             default:
@@ -56,7 +177,6 @@ public class Kasir {
     }
 
     public static String login(
-        Scanner input,
         String[][] user,
         String userAuthorization
         ) {
@@ -90,7 +210,6 @@ public class Kasir {
     }
 
     public static void processTransaction(
-        Scanner input,
         int customer,
         int table
     ) {
@@ -104,7 +223,7 @@ public class Kasir {
         boolean
             checkTable = true;
         while (true) {
-            selectDiningOption(input, table);
+            selectDiningOption(table);
             // if (diningOption.equals("Dine-in")) {
 
             //     // Check if there's table available for dine-in.
@@ -118,7 +237,7 @@ public class Kasir {
             //     receiptData = selectMenu(input);
 
             //     // select payment type.
-            //     Payment(input, receiptData, todaysIncome);
+            //     Payment(  todaysIncome);
 
             //     customer++;
 
@@ -126,7 +245,7 @@ public class Kasir {
             //     while (true) {
             //         confirmAnotherTransaction = input.next();
             //         if (confirmAnotherTransaction.equalsIgnoreCase("y")) {
-            //             processTransaction(input, customer, table);
+            //             processTransaction( customer, table);
             //         } else if (confirmAnotherTransaction.equalsIgnoreCase("n")) {
             //             System.out.println("Total customers : " + customer);
             //             System.out.println("Today's income is : Rp. " + todaysIncome);
@@ -145,7 +264,6 @@ public class Kasir {
     
 
     public static String selectDiningOption(
-        Scanner input,
         int table
     ) {
         String[] diningOptions = {
@@ -155,7 +273,7 @@ public class Kasir {
         String selectedDiningOptions = "";
         int index;
         boolean checkDiningOptionsIndex;
-        String[][] receiptData = new String[99][4];
+
 
         diningOptionsHorizontalGrid();
         System.out.printf("| %-3s| %-15s|%n", "ID", "Dining Option");
@@ -172,7 +290,7 @@ public class Kasir {
             System.out.print("Select your option : ");
             index = input.nextInt();
             if (index == 0) {
-                cashierActions(input);
+                cashierActions();
             } else if (index == 1) {
                 if (checkTable(table) == true) {
                     selectedDiningOptions = diningOptions[index-1];
@@ -188,7 +306,7 @@ public class Kasir {
                 checkDiningOptionsIndex = false;
             }
         }
-        selectMenu(input, selectedDiningOptions, table, 0.0, receiptData, 0);
+        selectMenu(selectedDiningOptions, table, 0.0, 0);
         return selectedDiningOptions;
     }
     
@@ -209,132 +327,13 @@ public class Kasir {
 
     }
 
+
     public static void selectMenu(
-        Scanner input,
         String diningOption,
         int table,
         double totalPrice,
-        String[][] receiptData,
         int receiptIndex
     ) {
-        String[] menuTypes = {
-            "Main Dish",
-            "Side Dish", 
-            "Beverages",
-            "Dessert"
-        };
-        String[] menuCategories = {
-            "Fried Rice", 
-            "Fried Chicken", 
-            "Hamburger",
-            "Pasta",
-            "Appetizer",
-            "Juice",
-            "Milkshake",
-            "Tea",
-            "Mineral Water",
-            "Salad",
-            "Ice Cream"
-        };
-        String[][] menu = {
-        
-            // Main Dish - Fried Rice Pax
-            { "Original Fried Rice (Spicy/Medium/Normal)", "Rp. 12,000", "12000", menuTypes[0], menuCategories[0] },
-            { "Javanese Fried Rice (Spicy/Medium/Normal)", "Rp. 15,000", "15000", menuTypes[0], menuCategories[0] },
-            { "Seafood Fried Rice (Spicy/Medium/Normal)", "Rp. 17,000", "17000", menuTypes[0], menuCategories[0] },
-            { "Goat Fried Rice (Spicy/Medium/Normal)", "Rp. 20,000", "20000", menuTypes[0], menuCategories[0] },
-            { "Crazy Fried Rice (Spicy/Medium/Normal)", "Rp. 17,000", "17000", menuTypes[0], menuCategories[0] },
-            { "Sausage Fried Rice (Spicy/Medium/Normal)", "Rp. 15,000", "15000", menuTypes[0], menuCategories[0] },
-            { "MeatBall Fried Rice (Spicy/Medium/Normal)", "Rp. 15,000", "15000", menuTypes[0], menuCategories[0] },
-            { "Chicken Fried Rice (Spicy/Medium/Normal)", "Rp. 15,000", "15000", menuTypes[0], menuCategories[0] },
-            { "Pete Fried Rice (Spicy/Medium/Normal)", "Rp. 15,000", "15000", menuTypes[0], menuCategories[0] },
-            { "Babat Fried Rice (Spicy/Medium/Normal)", "Rp. 20,000", "20000", menuTypes[0], menuCategories[0] },
-            { "Special Fried Rice (Spicy/Medium/Normal)", "Rp. 25,000", "25000", menuTypes[0], menuCategories[0] },
-        
-            // Main Dish - Fried Chicken Pax
-            { "Fried Chicken Original", "Rp. 22,000", "22000", menuTypes[0], menuCategories[1] },
-            { "Fried Chicken Mentai", "Rp. 25,000", "25000", menuTypes[0], menuCategories[1] },
-            { "Fried Chicken BBQ", "Rp. 25,000", "25000", menuTypes[0], menuCategories[1] },
-            { "Fried Chicken Teriyaki", "Rp. 25,000", "25000", menuTypes[0], menuCategories[1] },
-            { "Fried Chicken Spicy", "Rp. 22,000", "22000", menuTypes[0], menuCategories[1] },
-            { "Fried Chicken Salted Egg", "Rp. 25,000", "25000", menuTypes[0], menuCategories[1] },
-            { "Fried Chicken Black Pepper", "Rp. 25,000", "25000", menuTypes[0], menuCategories[1] },
-        
-            // Main Dish - Hamburger Pax
-            { "Classic Beef Burger", "Rp. 15,000", "15000", menuTypes[0], menuCategories[2] },
-            { "Fish Fillet Burger", "Rp. 15,000", "15000", menuTypes[0], menuCategories[2] },
-            { "Cheese Burger", "Rp. 17,000", "17000", menuTypes[0], menuCategories[2] },
-            { "Double Cheese Burger", "Rp. 20,000", "20000", menuTypes[0], menuCategories[2] },
-            { "Mushroom Swiss Burger", "Rp. 22,000", "22000", menuTypes[0], menuCategories[2] },
-            { "Mozzarella Cheese Burger", "Rp. 25,000", "25000", menuTypes[0], menuCategories[2] },
-            { "BBQ Beef Burger", "Rp. 22,000", "22000", menuTypes[0], menuCategories[2] },
-        
-            // Main Dish - Pasta Pax
-            { "Lasagne", "Rp. 15,000", "15000", menuTypes[0], menuCategories[3] },
-            { "Spaghetti in Tomato Sauce", "Rp. 15,000", "15000", menuTypes[0], menuCategories[3] },
-            { "Chicken and Linguini", "Rp. 15,000", "15000", menuTypes[0], menuCategories[3] },
-            { "Pasta and Tomato Sauce", "Rp. 12,000", "12000", menuTypes[0], menuCategories[3] },
-        
-            // Side Dish - Appetizer
-            { "Dimsum", "Rp. 3,500/pcs", "3500", menuTypes[1], menuCategories[4] },
-            { "Dumpling", "Rp. 3,500/pcs", "3500", menuTypes[1], menuCategories[4] },
-            { "Bakwan", "Rp. 2,000/pcs", "2000", menuTypes[1], menuCategories[4] },
-            { "Pempek", "Rp. 10,000/portion", "10000", menuTypes[1], menuCategories[4] },
-            { "Mendoan", "Rp. 3,000/pcs", "3000", menuTypes[1], menuCategories[4] },
-            { "French Fries Large", "Rp. 10,000", "10000", menuTypes[1], menuCategories[4] },
-            { "French Fries Medium", "Rp. 8,000", "8000", menuTypes[1], menuCategories[4] },
-            { "French Fries Small", "Rp. 5,000", "5000", menuTypes[1], menuCategories[4] },
-            { "Potato Chip", "Rp. 10,000/portion", "10000", menuTypes[1], menuCategories[4] },
-            { "Fried Tofu", "Rp. 2,000/pcs", "2000", menuTypes[1], menuCategories[4] },
-            { "Macaroni", "Rp. 10,000/portion", "10000", menuTypes[1], menuCategories[4] },
-            { "Waffle", "Rp. 10,000/portion", "10000", menuTypes[1], menuCategories[4] },
-            { "Egg (Sunny Side Up/Omelet/half boiled egg)", "Rp. 5,000/pcs", "5000", menuTypes[1], menuCategories[4] },
-            { "Rice", "Rp. 3,000/portion", "3000", menuTypes[1], menuCategories[4] },
-
-            // Beverage - Juice
-            { "Apple Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5] },
-            { "Mango Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5] },
-            { "Avocado Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5] },
-            { "Strawberry Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5] },
-            { "Orange Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5] },
-            { "Pineapple Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5] },
-            { "Beetroot Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5] },
-            { "Tomato Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5] },
-            { "Grapefruit Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5] },
-            { "Watermelon Juice", "Rp. 12,000", "12000", menuTypes[2], menuCategories[5] },
-        
-            // Beverage - Milkshake
-            { "Vanilla Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6] },
-            { "Chocolate Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6] },
-            { "Strawberry Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6] },
-            { "Banana Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6] },
-            { "Mango Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6] },
-            { "Caramel Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6] },
-            { "Coconut Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6] },
-            { "Oreo Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6] },
-            { "Milo Milkshake", "Rp. 15,000", "15000", menuTypes[2], menuCategories[6] },
-        
-            // Beverage - Tea
-            { "Iced Tea", "Rp. 8,000", "8000", menuTypes[2], menuCategories[7] },
-            { "Hot Tea", "Rp. 8,000", "8000", menuTypes[2], menuCategories[7] },
-            { "Black Tea", "Rp. 10,000", "10000", menuTypes[2], menuCategories[7] },
-            { "Green Tea", "Rp. 10,000", "10000", menuTypes[2], menuCategories[7] },
-        
-            // Beverage - Mineral Water
-            { "Mineral Water", "Rp. 5,000", "5000", menuTypes[2], menuCategories[8] },
-
-            // Dessert - Salad
-            { "Salad", "Rp. 10,000", "10000", menuTypes[3], menuCategories[9] },
-
-            // Dessert - Ice Cream
-            { "Vanilla Ice Cream", "Rp. 10,000", "10000", menuTypes[3], menuCategories[10] },
-            { "Chocolate Ice Cream", "Rp. 10,000", "10000", menuTypes[3], menuCategories[10] },
-            { "Strawberry Ice Cream", "Rp. 10,000", "10000", menuTypes[3], menuCategories[10] },
-            { "Caramel Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10] },
-            { "Mocha Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10] },
-            { "Mint Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10] },
-            { "Macha Ice Cream", "Rp. 12,000", "12000", menuTypes[3], menuCategories[10] },
-        };
         int menuIndex, menuTypesIndex;
         int amount;
         int[] index = new int[menu.length];
@@ -370,27 +369,27 @@ public class Kasir {
                 System.out.print("Please select your type : ");
                 menuTypesIndex = input.nextInt();
                 if (menuTypesIndex == 0) {
-                    selectDiningOption(input, table);
+                    selectDiningOption(table);
                 } else if (menuTypesIndex > menuTypes.length) {
                     System.out.println("Please select available type.");
                     continue;
                 } else {
                     int validIndexCount = 0;
                     menuHorizontalGrid();
-                    System.out.printf("| %-3s| %-45s| %-20s| %-20s|%n", "ID", "Menu Item", "Category", "Price");
+                    System.out.printf("| %-3s| %-45s| %-20s| %-20s| %-20s| %n", "ID", "Menu Item", "Category", "Price", "Stocks");
                     menuHorizontalGrid();
 
                     for (int i = 0; i < menu.length; i++) {
                         if (menu[i][3].equals(menuTypes[menuTypesIndex - 1])) {
-                            System.out.printf("| %-3s| %-45s| %-20s| %-20s|%n", (i+1), menu[i][0], menu[i][4], menu[i][1]);
+                            System.out.printf("| %-3s| %-45s| %-20s| %-20s| %-20s|%n", (i+1), menu[i][0], menu[i][4], menu[i][1],menu[i][5]);
                             index[validIndexCount] = (i + 1);
                             validIndexCount++;
                         }
                     }
                     menuHorizontalGrid();
 
-                    System.out.printf("| %-94s|%n", "0. Back");
-                    System.out.printf("+%93s+%n", "-----------------------------------------------------------------------------------------------");
+                    System.out.printf("| %-116s|%n", "0. Back");
+                    System.out.printf("+%113s+%n", "---------------------------------------------------------------------------------------------------------------------");
                     checkMenuTypesIndex = false;
                 }
             }
@@ -414,18 +413,30 @@ public class Kasir {
                 if (isValidIndex) {
                     if (menuIndex != 0) {
                         System.out.println(menu[menuIndex-1][0] + " = " + menu[menuIndex-1][1]);
+
+
+                        while (true){
                         System.out.print("Total amount: ");
                         amount = input.nextInt();
+                        if (amount == 0){
+                            System.out.println("Please choose amount above 0");
+                        } else if (!(Integer.parseInt(menu[menuIndex-1][5]) < amount)) {
+                            break;
+                        } else {
+                            System.out.println("Maximum Order is " + (menu[menuIndex-1][5]));
+                            }
+                        }
                         receiptData[receiptIndex][0] = menu[menuIndex-1][0];
                         receiptData[receiptIndex][1] = menu[menuIndex-1][1];
                         receiptData[receiptIndex][2] = String.valueOf(amount);
                         receiptData[receiptIndex][3] = String.valueOf(Integer.parseInt(menu[menuIndex-1][2]) * amount);
+                        menu[menuIndex-1][5] = String.valueOf(Integer.parseInt(menu[menuIndex-1][5]) - amount);
                         receiptIndex += 1;
                         totalPrice += Integer.parseInt(menu[menuIndex-1][2]) * amount;
                         System.out.println("Total Price : Rp. " + formatCurrency(totalPrice));
                         break;
                     } else if (menuIndex == 0) {
-                        selectMenu(input, diningOption, table, totalPrice, receiptData, receiptIndex);
+                        selectMenu(diningOption, table, totalPrice, receiptIndex);
                     }
                 } else {
                     System.out.println("Please select the available menus.");
@@ -453,13 +464,13 @@ public class Kasir {
             } else {
                 continue;
             }
-            Payment(input, receiptData, receiptIndex);
+            Payment(receiptIndex);
             checkSelectMenu = false;
         }
     }
 
     public static void menuHorizontalGrid() {
-        System.out.printf("+%-4s+%-46s+%-21s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "---------------------");
+        System.out.printf("+%-4s+%-46s+%-21s+%-21s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "---------------------","---------------------");
     }
 
     public static void menuTypeHorizontalGrid() {
@@ -467,8 +478,6 @@ public class Kasir {
     }
 
     public static void Payment(
-        Scanner input,
-        String[][] receiptData,
         double todaysIncome
     ) {
         String[] paymentType = {
@@ -487,12 +496,12 @@ public class Kasir {
         while (true) {
             // Cash payment type.
             if (paymentId == 1) {
-                Cash(input, receiptData, paymentId, paymentType[paymentId-1], todaysIncome);
+                Cash( paymentId, paymentType[paymentId-1], todaysIncome);
                 break;
             } 
             // Debit payment type.
             else if (paymentId == 2) {
-                Debit(input, receiptData, paymentId, paymentType[paymentId-1], todaysIncome);
+                Debit( paymentId, paymentType[paymentId-1], todaysIncome);
                 break;
             } 
             // Unavailable payment type.
@@ -504,8 +513,6 @@ public class Kasir {
     }
 
     public static double Debit(
-        Scanner input,
-        String[][] receiptData, 
         int paymentId,
         String paymentType,
         double todaysIncome
@@ -577,8 +584,6 @@ public class Kasir {
     }
 
     public static double Cash(
-        Scanner input,
-        String[][] receiptData, 
         int paymentId,
         String paymentType,
         double todaysIncome
@@ -640,41 +645,6 @@ public class Kasir {
         // totalPrice = 0.0;
 
         return todaysIncome;
-    }
-
-    // This is the design of the receipt
-    public static void printReceipt (
-        String[][] receiptData,
-        int paymentId, 
-        String selectedPaymentType, 
-        int bankId,
-        String selectedBank
-    ) {
-        double totalPrice = 0.0;
-        receiptHorizontalGrid();
-        System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", "No", "Menu Item", "Price", "Amount", "Total Price");
-        receiptHorizontalGrid();
-        for (int i = 0; i < receiptData.length; i++) {
-            if (
-                receiptData[i][0] != null || 
-                receiptData[i][1] != null || 
-                receiptData[i][2] != null || 
-                receiptData[i][3] != null) 
-            {    
-                System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", i + 1, receiptData[i][0], receiptData[i][1], receiptData[i][2] , "Rp. " + addCommas(Integer.parseInt(receiptData[i][3])));
-                totalPrice += Double.parseDouble(receiptData[i][3]);
-            }
-        }
-        receiptHorizontalGrid();
-        System.out.printf("| %-83s| %-20s|%n", "Payment Type", selectedPaymentType);
-        System.out.printf("|%-4s %-46s %-21s %-10s|%-21s|%n", "    ", "                  ", "      ", "    ", "      ");
-        System.out.printf("+%-4s-%-46s-%-21s-%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
-        System.out.printf("| %-83s| %-20s|%n", "Bank", selectedBank);
-        System.out.printf("|%-4s %-46s %-21s %-10s|%-21s|%n", "    ", "                  ", "      ", "    ", "      ");
-        System.out.printf("+%-4s-%-46s-%-21s-%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
-        System.out.printf("| %-83s| %-20s|%n", "Total Price", formatCurrency(totalPrice));
-        System.out.printf("|%-4s %-46s %-21s %-10s|%-21s|%n", "    ", "                  ", "      ", "    ", "      ");
-        System.out.printf("+%-4s-%-46s-%-21s-%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
     }
 
     public static void receiptHorizontalGrid () {
