@@ -140,11 +140,15 @@ public class Kasir {
         };
         String 
             userAuthorization = null;
+        int 
+            table = 5;
+        double 
+            todaysIncome = 0.0;
 
         // Login with function
         userAuthorization = login(user, userAuthorization);
         if (userAuthorization == roles[0]) {
-            cashierActions();
+            cashierActions(table, todaysIncome);
         } else if (userAuthorization == roles[1]) {
             System.out.println("(ERROR) No available action.");
         } else if (userAuthorization == roles[2]) {
@@ -155,25 +159,46 @@ public class Kasir {
     // Functions Initialization
 
     public static void cashierActions (
+        int table,
+        double todaysIncome
     ) {
         int
-            table = 2,
             customer = 1,
             inputAction;
 
+        System.out.println("There is " + table + " avaible table");
         System.out.println("1. Process Transaction");
-        System.out.println("2. Input Tables");
+        System.out.println("2. Insert Avaible Tables");
         System.out.println("3. View Sales Reports");
+        System.out.println("0. Turn OFf Cashier System");
         System.out.print("Select your action : ");
         inputAction = input.nextInt();
         switch (inputAction) {
             case 1:
-                processTransaction(customer, table);
+                processTransaction(customer, table, todaysIncome);
                 break;
-        
+            case 2:
+                table = insertTable(table);
+                cashierActions(table, todaysIncome);
+                break;
+            case 3:
+                System.out.println("Today's income Rp. " + todaysIncome);
+                cashierActions(table, todaysIncome);
+                break;
             default:
+                System.exit(0);
                 break;
         }
+    }
+
+    // This is to insert the table
+    public static int insertTable(
+        int table
+    ) {
+        System.out.println("There is " + table + " avaible table");
+        System.out.print("Insert the current avaible table : ");
+        table = input.nextInt();
+        return table;
     }
 
     public static String login(
@@ -211,19 +236,20 @@ public class Kasir {
 
     public static void processTransaction(
         int customer,
-        int table
+        int table,
+        double todaysIncome
     ) {
-        String[][] receiptData = new String[99][99];
-        String
-            confirmAnotherTransaction,
-            diningOption;
-        double 
-            totalPrice,
-            todaysIncome = 0.0;
-        boolean
-            checkTable = true;
+        // String[][] receiptData = new String[99][99];
+        // String
+        //     confirmAnotherTransaction,
+        //     diningOption;
+        // double 
+        //     totalPrice,
+        //     todaysIncome = 0.0;
+        // boolean
+        //     checkTable = true;
         while (true) {
-            selectDiningOption(table);
+            selectDiningOption(table, todaysIncome);
             // if (diningOption.equals("Dine-in")) {
 
             //     // Check if there's table available for dine-in.
@@ -264,7 +290,8 @@ public class Kasir {
     
 
     public static String selectDiningOption(
-        int table
+        int table,
+        double todaysIncome
     ) {
         String[] diningOptions = {
             "Dine-in",
@@ -290,11 +317,12 @@ public class Kasir {
             System.out.print("Select your option : ");
             index = input.nextInt();
             if (index == 0) {
-                cashierActions();
+                cashierActions(table, todaysIncome);
             } else if (index == 1) {
                 if (checkTable(table) == true) {
                     selectedDiningOptions = diningOptions[index-1];
                     checkDiningOptionsIndex = false;
+                    table--;
                 } else {
                     continue;
                 }
@@ -306,10 +334,10 @@ public class Kasir {
                 checkDiningOptionsIndex = false;
             }
         }
-        selectMenu(selectedDiningOptions, table, 0.0, 0);
+        selectMenu(selectedDiningOptions, table, 0.0, 0, todaysIncome);
         return selectedDiningOptions;
     }
-    
+
     public static void diningOptionsHorizontalGrid() {
         System.out.printf("+%-4s+%-16s+%n", "----", "----------------");
     }
@@ -317,14 +345,12 @@ public class Kasir {
     public static boolean checkTable(int table) {
         System.out.println("Checking if there's table available...");
         if (table != 0) {
-            table--;
             System.out.println(table + " Table available.");
             return true;
         } else {
             System.out.println("There's no table available.");
             return false;
         }
-
     }
 
 
@@ -332,12 +358,14 @@ public class Kasir {
         String diningOption,
         int table,
         double totalPrice,
-        int receiptIndex
+        int receiptIndex,
+        double todaysIncome
     ) {
         int menuIndex, menuTypesIndex;
         int amount;
         int[] index = new int[menu.length];
-        String orderMore = null;  
+        String orderMore = null; 
+        double pricePerMenu = 0;
         boolean 
             checkSelectMenu,
             checkMenuIndex, 
@@ -369,7 +397,7 @@ public class Kasir {
                 System.out.print("Please select your type : ");
                 menuTypesIndex = input.nextInt();
                 if (menuTypesIndex == 0) {
-                    selectDiningOption(table);
+                    selectDiningOption(table, todaysIncome);
                 } else if (menuTypesIndex > menuTypes.length) {
                     System.out.println("Please select available type.");
                     continue;
@@ -432,11 +460,13 @@ public class Kasir {
                         receiptData[receiptIndex][3] = String.valueOf(Integer.parseInt(menu[menuIndex-1][2]) * amount);
                         menu[menuIndex-1][5] = String.valueOf(Integer.parseInt(menu[menuIndex-1][5]) - amount);
                         receiptIndex += 1;
-                        totalPrice += Integer.parseInt(menu[menuIndex-1][2]) * amount;
+                        pricePerMenu = Integer.parseInt(menu[menuIndex-1][2]) * amount;
+                        totalPrice += pricePerMenu;
+
                         System.out.println("Total Price : Rp. " + formatCurrency(totalPrice));
                         break;
                     } else if (menuIndex == 0) {
-                        selectMenu(diningOption, table, totalPrice, receiptIndex);
+                        selectMenu(diningOption, table, totalPrice, receiptIndex, todaysIncome);
                     }
                 } else {
                     System.out.println("Please select the available menus.");
@@ -464,7 +494,7 @@ public class Kasir {
             } else {
                 continue;
             }
-            Payment(receiptIndex);
+            Payment(todaysIncome, table, totalPrice);
             checkSelectMenu = false;
         }
     }
@@ -478,7 +508,9 @@ public class Kasir {
     }
 
     public static void Payment(
-        double todaysIncome
+        double todaysIncome,
+        int table,
+        double totalPrice
     ) {
         String[] paymentType = {
             "Cash",
@@ -496,12 +528,12 @@ public class Kasir {
         while (true) {
             // Cash payment type.
             if (paymentId == 1) {
-                Cash( paymentId, paymentType[paymentId-1], todaysIncome);
+                Cash( paymentId, paymentType[paymentId-1], todaysIncome, totalPrice, table);
                 break;
             } 
             // Debit payment type.
             else if (paymentId == 2) {
-                Debit( paymentId, paymentType[paymentId-1], todaysIncome);
+                Debit( paymentId, paymentType[paymentId-1], todaysIncome, totalPrice, table);
                 break;
             } 
             // Unavailable payment type.
@@ -512,10 +544,12 @@ public class Kasir {
         }
     }
 
-    public static double Debit(
+    public static void Debit(
         int paymentId,
         String paymentType,
-        double todaysIncome
+        double todaysIncome,
+        double totalPrice,
+        int table
     ) {        
         String[] availableBank = {
             "Bank Mandiri",
@@ -544,7 +578,6 @@ public class Kasir {
                 if (bankId == (j+1)) {
                     System.out.println("Bank        : " + availableBank[j]);
                     System.out.println("Printing receipt...");
-                    double totalPrice = 0.0;
                     receiptHorizontalGrid();
                     System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", "No", "Menu Item", "Price", "Amount", "Total Price");
                     receiptHorizontalGrid();
@@ -556,7 +589,6 @@ public class Kasir {
                             receiptData[i][3] != null) 
                         {    
                             System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", i + 1, receiptData[i][0], receiptData[i][1], receiptData[i][2] , "Rp. " + addCommas(Integer.parseInt(receiptData[i][3])));
-                            totalPrice += Double.parseDouble(receiptData[i][3]);
                         }
                     }
                     receiptHorizontalGrid();
@@ -580,26 +612,22 @@ public class Kasir {
                 System.out.println("Please select available bank.");
             }
         }
-        return todaysIncome;
+
+        todaysIncome += totalPrice;
+        cashierActions(table, todaysIncome);
     }
 
-    public static double Cash(
+    public static void Cash(
         int paymentId,
         String paymentType,
-        double todaysIncome
+        double todaysIncome,
+        double totalPrice,
+        int table
     ) {
-        double paymentAmount = 0.0, change = 0.0, totalPrice = 0.0;
-        for (int i = 0; i < receiptData.length; i++) {
-            if (
-                    receiptData[i][0] != null || 
-                    receiptData[i][1] != null || 
-                    receiptData[i][2] != null || 
-                    receiptData[i][3] != null
-                ) 
-            {    
-                totalPrice += Double.parseDouble(receiptData[i][3]);
-            }
-        }
+        double 
+            paymentAmount = 0.0,
+            change = 0.0;
+
         System.out.println("Total price           : " + formatCurrency(totalPrice));
         while (paymentAmount - totalPrice < 0) {
             System.out.print("Input payment nominal : ");
@@ -623,7 +651,6 @@ public class Kasir {
                 ) 
             {    
                 System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", i + 1, receiptData[i][0], receiptData[i][1], receiptData[i][2] , "Rp. " + addCommas(Integer.parseInt(receiptData[i][3])));
-                totalPrice += Double.parseDouble(receiptData[i][3]);
             }
         }
         receiptHorizontalGrid();
@@ -644,7 +671,8 @@ public class Kasir {
         // todaysIncome += totalPrice;
         // totalPrice = 0.0;
 
-        return todaysIncome;
+        todaysIncome += totalPrice;
+        cashierActions(table, todaysIncome);
     }
 
     public static void receiptHorizontalGrid () {
