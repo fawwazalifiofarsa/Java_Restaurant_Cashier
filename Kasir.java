@@ -642,41 +642,6 @@ public class Kasir {
         return todaysIncome;
     }
 
-    // This is the design of the receipt
-    public static void printReceipt (
-        String[][] receiptData,
-        int paymentId, 
-        String selectedPaymentType, 
-        int bankId,
-        String selectedBank
-    ) {
-        double totalPrice = 0.0;
-        receiptHorizontalGrid();
-        System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", "No", "Menu Item", "Price", "Amount", "Total Price");
-        receiptHorizontalGrid();
-        for (int i = 0; i < receiptData.length; i++) {
-            if (
-                receiptData[i][0] != null || 
-                receiptData[i][1] != null || 
-                receiptData[i][2] != null || 
-                receiptData[i][3] != null) 
-            {    
-                System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", i + 1, receiptData[i][0], receiptData[i][1], receiptData[i][2] , "Rp. " + addCommas(Integer.parseInt(receiptData[i][3])));
-                totalPrice += Double.parseDouble(receiptData[i][3]);
-            }
-        }
-        receiptHorizontalGrid();
-        System.out.printf("| %-83s| %-20s|%n", "Payment Type", selectedPaymentType);
-        System.out.printf("|%-4s %-46s %-21s %-10s|%-21s|%n", "    ", "                  ", "      ", "    ", "      ");
-        System.out.printf("+%-4s-%-46s-%-21s-%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
-        System.out.printf("| %-83s| %-20s|%n", "Bank", selectedBank);
-        System.out.printf("|%-4s %-46s %-21s %-10s|%-21s|%n", "    ", "                  ", "      ", "    ", "      ");
-        System.out.printf("+%-4s-%-46s-%-21s-%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
-        System.out.printf("| %-83s| %-20s|%n", "Total Price", formatCurrency(totalPrice));
-        System.out.printf("|%-4s %-46s %-21s %-10s|%-21s|%n", "    ", "                  ", "      ", "    ", "      ");
-        System.out.printf("+%-4s-%-46s-%-21s-%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
-    }
-
     public static void receiptHorizontalGrid () {
         System.out.printf("+%-4s+%-46s+%-21s+%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
     }
@@ -705,7 +670,6 @@ public class Kasir {
 
         return formattedValue.toString();
     }
-
     
     public static String formatDecimal(double value) {
         String decimalPart = String.valueOf(value % 1);
