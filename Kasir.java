@@ -140,11 +140,14 @@ public class Kasir {
         };
         String 
             userAuthorization = null;
+        int 
+            table = 5;
+        double todaysIncome = 0.0;
 
         // Login with function
         userAuthorization = login(user, userAuthorization);
         if (userAuthorization == roles[0]) {
-            cashierActions();
+            cashierActions(table, todaysIncome);
         } else if (userAuthorization == roles[1]) {
             System.out.println("(ERROR) No available action.");
         } else if (userAuthorization == roles[2]) {
@@ -155,25 +158,47 @@ public class Kasir {
     // Functions Initialization
 
     public static void cashierActions (
+        int table,
+        double todaysIncome
     ) {
         int
-            table = 2,
             customer = 1,
             inputAction;
 
+        System.out.println("==========================================================");
+        System.out.println("There is " + table + " avaible table");
         System.out.println("1. Process Transaction");
-        System.out.println("2. Input Tables");
+        System.out.println("2. Insert Avaible Tables");
         System.out.println("3. View Sales Reports");
+        System.out.println("0. Turn OFf Cashier System");
         System.out.print("Select your action : ");
         inputAction = input.nextInt();
+        System.out.println("==========================================================");
         switch (inputAction) {
             case 1:
-                processTransaction(customer, table);
+                processTransaction(customer, table, todaysIncome);
                 break;
-        
+            case 2:
+                table = insertTable(table);
+                cashierActions(table, todaysIncome);
+                break;
+            case 3:
+                System.out.println("Today's income Rp. " + todaysIncome);
+                cashierActions(table, todaysIncome);
+                break;
             default:
+                System.exit(0);
                 break;
         }
+    }
+
+    public static int insertTable(
+        int table
+    ) {
+        System.out.println("There is " + table + " avaible table");
+        System.out.print("Insert the current avaible table : ");
+        table = input.nextInt();
+        return table;
     }
 
     public static String login(
@@ -185,7 +210,9 @@ public class Kasir {
 
         // Input username and password to login.
         while (checkUser) {
-            System.out.println("Please login first.");
+            System.out.println("==========================================================");
+            System.out.println("------------------ Please login first --------------------");
+            System.out.println("==========================================================");
             System.out.print("Username  : ");
             username = input.next();
             System.out.print("Password  : ");
@@ -203,7 +230,8 @@ public class Kasir {
                 }
             }
             if (checkUser) {
-                System.out.println("Username or password is incorrect. Please try again.");
+                System.out.println("==========================================================");
+                System.out.println("Username or password is incorrect. Please try again.");         
             }
         }
         return userAuthorization;
@@ -211,19 +239,20 @@ public class Kasir {
 
     public static void processTransaction(
         int customer,
-        int table
+        int table,
+        double todaysIncome
     ) {
-        String[][] receiptData = new String[99][99];
-        String
-            confirmAnotherTransaction,
-            diningOption;
-        double 
-            totalPrice,
-            todaysIncome = 0.0;
-        boolean
-            checkTable = true;
+        // String[][] receiptData = new String[99][99];
+        // String
+        //     confirmAnotherTransaction,
+        //     diningOption;
+        // double 
+        //     totalPrice,
+        //     todaysIncome = 0.0;
+        // boolean
+        //     checkTable = true;
         while (true) {
-            selectDiningOption(table);
+            selectDiningOption(table, todaysIncome);
             // if (diningOption.equals("Dine-in")) {
 
             //     // Check if there's table available for dine-in.
@@ -264,7 +293,8 @@ public class Kasir {
     
 
     public static String selectDiningOption(
-        int table
+        int table,
+        double todaysIncome
     ) {
         String[] diningOptions = {
             "Dine-in",
@@ -290,11 +320,12 @@ public class Kasir {
             System.out.print("Select your option : ");
             index = input.nextInt();
             if (index == 0) {
-                cashierActions();
+                cashierActions(table, todaysIncome);
             } else if (index == 1) {
                 if (checkTable(table) == true) {
                     selectedDiningOptions = diningOptions[index-1];
                     checkDiningOptionsIndex = false;
+                    table--;
                 } else {
                     continue;
                 }
@@ -306,7 +337,7 @@ public class Kasir {
                 checkDiningOptionsIndex = false;
             }
         }
-        selectMenu(selectedDiningOptions, table, 0.0, 0);
+        selectMenu(selectedDiningOptions, table, 0.0, 0, todaysIncome);
         return selectedDiningOptions;
     }
     
@@ -317,22 +348,20 @@ public class Kasir {
     public static boolean checkTable(int table) {
         System.out.println("Checking if there's table available...");
         if (table != 0) {
-            table--;
             System.out.println(table + " Table available.");
             return true;
         } else {
             System.out.println("There's no table available.");
             return false;
         }
-
     }
-
 
     public static void selectMenu(
         String diningOption,
         int table,
         double totalPrice,
-        int receiptIndex
+        int receiptIndex,
+        double todaysIncome
     ) {
         int menuIndex, menuTypesIndex;
         int amount;
@@ -346,6 +375,9 @@ public class Kasir {
             checkOrderMore;
 
         // select menu.
+        System.out.println("===================================");
+        System.out.println(table);
+        System.out.println("===================================");
         checkSelectMenu = true;
         while (checkSelectMenu) {
             menuTypeHorizontalGrid();
@@ -369,7 +401,7 @@ public class Kasir {
                 System.out.print("Please select your type : ");
                 menuTypesIndex = input.nextInt();
                 if (menuTypesIndex == 0) {
-                    selectDiningOption(table);
+                    selectDiningOption(table, todaysIncome);
                 } else if (menuTypesIndex > menuTypes.length) {
                     System.out.println("Please select available type.");
                     continue;
@@ -399,6 +431,7 @@ public class Kasir {
             while (checkMenuIndex) {
                 System.out.print("Please select your menu : ");
                 menuIndex = input.nextInt();
+                System.out.println("==========================================================");      
 
                 // Check if the input menuIndex is within the valid range
                 isValidIndex = false;
@@ -413,7 +446,6 @@ public class Kasir {
                 if (isValidIndex) {
                     if (menuIndex != 0) {
                         System.out.println(menu[menuIndex-1][0] + " = " + menu[menuIndex-1][1]);
-
 
                         while (true){
                         System.out.print("Total amount: ");
@@ -433,10 +465,12 @@ public class Kasir {
                         menu[menuIndex-1][5] = String.valueOf(Integer.parseInt(menu[menuIndex-1][5]) - amount);
                         receiptIndex += 1;
                         totalPrice += Integer.parseInt(menu[menuIndex-1][2]) * amount;
+                        todaysIncome += totalPrice;
+
                         System.out.println("Total Price : Rp. " + formatCurrency(totalPrice));
                         break;
                     } else if (menuIndex == 0) {
-                        selectMenu(diningOption, table, totalPrice, receiptIndex);
+                        selectMenu(diningOption, table, totalPrice, receiptIndex, todaysIncome);
                     }
                 } else {
                     System.out.println("Please select the available menus.");
@@ -448,12 +482,13 @@ public class Kasir {
             while (checkOrderMore) {
                 System.out.print("Do you want to order more? (y/n) : ");
                 orderMore = input.next();
+                System.out.println("==========================================================");      
 
                 if (orderMore.equalsIgnoreCase("n")) {
                     System.out.println("Please select payment type.");
                     checkOrderMore = false;
                 } else if (orderMore.equalsIgnoreCase("y")) {
-                    System.out.println("Please select your menu : ");
+                    System.out.println("Please select your menu ");
                     checkOrderMore = false;
                 } else {
                     System.out.println("Please answer (y/n)");
@@ -464,7 +499,7 @@ public class Kasir {
             } else {
                 continue;
             }
-            Payment(receiptIndex);
+            Payment(todaysIncome, table);
             checkSelectMenu = false;
         }
     }
@@ -478,7 +513,8 @@ public class Kasir {
     }
 
     public static void Payment(
-        double todaysIncome
+        double todaysIncome,
+        int table
     ) {
         String[] paymentType = {
             "Cash",
@@ -496,12 +532,12 @@ public class Kasir {
         while (true) {
             // Cash payment type.
             if (paymentId == 1) {
-                Cash( paymentId, paymentType[paymentId-1], todaysIncome);
+                Cash( paymentId, paymentType[paymentId-1], todaysIncome, table);
                 break;
             } 
             // Debit payment type.
             else if (paymentId == 2) {
-                Debit( paymentId, paymentType[paymentId-1], todaysIncome);
+                Debit( paymentId, paymentType[paymentId-1], todaysIncome, table);
                 break;
             } 
             // Unavailable payment type.
@@ -512,10 +548,11 @@ public class Kasir {
         }
     }
 
-    public static double Debit(
+    public static void Debit(
         int paymentId,
         String paymentType,
-        double todaysIncome
+        double todaysIncome,
+        int table
     ) {        
         String[] availableBank = {
             "Bank Mandiri",
@@ -580,13 +617,14 @@ public class Kasir {
                 System.out.println("Please select available bank.");
             }
         }
-        return todaysIncome;
+        cashierActions(table, todaysIncome);
     }
 
-    public static double Cash(
+    public static void Cash(
         int paymentId,
         String paymentType,
-        double todaysIncome
+        double todaysIncome,
+        int table
     ) {
         double paymentAmount = 0.0, change = 0.0, totalPrice = 0.0;
         for (int i = 0; i < receiptData.length; i++) {
@@ -644,7 +682,7 @@ public class Kasir {
         // todaysIncome += totalPrice;
         // totalPrice = 0.0;
 
-        return todaysIncome;
+        cashierActions(table, todaysIncome);
     }
 
     public static void receiptHorizontalGrid () {
