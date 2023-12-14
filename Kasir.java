@@ -210,7 +210,9 @@ public class Kasir {
 
         // Input username and password to login.
         while (checkUser) {
-            System.out.println("Please login first.");
+            System.out.println("==========================================================");
+            System.out.println("------------------ Please login first --------------------");
+            System.out.println("==========================================================");
             System.out.print("Username  : ");
             username = input.next();
             System.out.print("Password  : ");
@@ -228,7 +230,8 @@ public class Kasir {
                 }
             }
             if (checkUser) {
-                System.out.println("Username or password is incorrect. Please try again.");
+                System.out.println("==========================================================");
+                System.out.println("Username or password is incorrect. Please try again.");         
             }
         }
         return userAuthorization;
@@ -353,7 +356,6 @@ public class Kasir {
         }
     }
 
-
     public static void selectMenu(
         String diningOption,
         int table,
@@ -374,6 +376,9 @@ public class Kasir {
             checkOrderMore;
 
         // select menu.
+        System.out.println("===================================");
+        System.out.println(table);
+        System.out.println("===================================");
         checkSelectMenu = true;
         while (checkSelectMenu) {
             menuTypeHorizontalGrid();
@@ -427,6 +432,7 @@ public class Kasir {
             while (checkMenuIndex) {
                 System.out.print("Please select your menu : ");
                 menuIndex = input.nextInt();
+                System.out.println("==========================================================");      
 
                 // Check if the input menuIndex is within the valid range
                 isValidIndex = false;
@@ -441,7 +447,6 @@ public class Kasir {
                 if (isValidIndex) {
                     if (menuIndex != 0) {
                         System.out.println(menu[menuIndex-1][0] + " = " + menu[menuIndex-1][1]);
-
 
                         while (true){
                         System.out.print("Total amount: ");
@@ -478,12 +483,13 @@ public class Kasir {
             while (checkOrderMore) {
                 System.out.print("Do you want to order more? (y/n) : ");
                 orderMore = input.next();
+                System.out.println("==========================================================");      
 
                 if (orderMore.equalsIgnoreCase("n")) {
                     System.out.println("Please select payment type.");
                     checkOrderMore = false;
                 } else if (orderMore.equalsIgnoreCase("y")) {
-                    System.out.println("Please select your menu : ");
+                    System.out.println("Please select your menu ");
                     checkOrderMore = false;
                 } else {
                     System.out.println("Please answer (y/n)");
