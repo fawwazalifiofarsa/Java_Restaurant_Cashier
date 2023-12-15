@@ -8,6 +8,13 @@
             "type": "java",
             "name": "Kasir",
             "request": "launch",
+            "mainClass": "Kasir",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "Kasir",
+            "request": "launch",
             "mainClass": "Java_Restaurant_Cashier.Kasir",
             "projectName": ""
         },

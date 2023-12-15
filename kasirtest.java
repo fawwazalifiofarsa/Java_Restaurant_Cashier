@@ -1,4 +1,3 @@
-package Java_Restaurant_Cashier;
 import java.util.Scanner;
 public class Kasir {
 
@@ -27,7 +26,7 @@ public class Kasir {
     static String[][] menu = {
 
             // Main Dish - Fried Rice Pax
-            { "Original Fried Rice", "Rp. 12,000", "12000", menuTypes[0], menuCategories[0],"10"},
+            { "Original Fried Rice", "Rp. 12,000", "12000", menuTypes[0], menuCategories[0],"12"},
             { "Javanese Fried Rice", "Rp. 15,000", "15000", menuTypes[0], menuCategories[0],"21"},
             { "Seafood Fried Rice", "Rp. 17,000", "17000", menuTypes[0], menuCategories[0],"19" },
             { "Goat Fried Rice", "Rp. 20,000", "20000", menuTypes[0], menuCategories[0],"24" },
@@ -163,6 +162,7 @@ public class Kasir {
         double todaysIncome
     ) {
         int
+            customer = 1,
             inputAction;
 
         System.out.println("There is " + table + " avaible table");
@@ -174,14 +174,14 @@ public class Kasir {
         inputAction = input.nextInt();
         switch (inputAction) {
             case 1:
-                processTransaction(table, todaysIncome);
+                processTransaction(customer, table, todaysIncome);
                 break;
             case 2:
-                table += insertTable(table);
+                table = insertTable(table);
                 cashierActions(table, todaysIncome);
                 break;
             case 3:
-                System.out.println("Today's income " + formatCurrency(todaysIncome));
+                System.out.println("Today's income Rp. " + todaysIncome);
                 cashierActions(table, todaysIncome);
                 break;
             default:
@@ -195,7 +195,7 @@ public class Kasir {
         int table
     ) {
         System.out.println("There is " + table + " avaible table");
-        System.out.print("Insert avaible table : ");
+        System.out.print("Insert the current avaible table : ");
         table = input.nextInt();
         return table;
     }
@@ -237,11 +237,13 @@ public class Kasir {
     }
 
     public static void processTransaction(
+        int customer,
         int table,
         double todaysIncome
     ) {
         selectDiningOption(table, todaysIncome);
     }
+    
 
     public static void selectDiningOption(
         int table,
@@ -272,6 +274,9 @@ public class Kasir {
             index = input.nextInt();
             if (index == 0) {
                 cashierActions(table, todaysIncome);
+            } else if (index > diningOptions.length) {
+                System.out.println("Please select the available option.");
+                continue;
             } else if (index == 1) {
                 if (checkTable(table) == true) {
                     selectedDiningOptions = diningOptions[index-1];
@@ -280,9 +285,6 @@ public class Kasir {
                 } else {
                     continue;
                 }
-            } else if (index > diningOptions.length) {
-                System.out.println("Please select the available option.");
-                continue;
             } else {
                 selectedDiningOptions = diningOptions[index-1];
                 checkDiningOptionsIndex = false;
@@ -396,16 +398,14 @@ public class Kasir {
                         System.out.println(menu[menuIndex-1][0] + " = " + menu[menuIndex-1][1]);
 
                         while (true){
-                            System.out.print("Total amount: ");
-                            amount = input.nextInt();
-                            if (amount == 0){
-                                System.out.println("Please choose amount above 0");
-                            } else if (Integer.parseInt(menu[menuIndex-1][5]) == 0) {
-                                System.out.println("Stock not available.");
-                            } else if (!(Integer.parseInt(menu[menuIndex-1][5]) < amount)) {
-                                break;
-                            } else {
-                                System.out.println("Maximum Order is " + (menu[menuIndex-1][5]));
+                        System.out.print("Total amount: ");
+                        amount = input.nextInt();
+                        if (amount == 0){
+                            System.out.println("Please choose amount above 0");
+                        } else if (!(Integer.parseInt(menu[menuIndex-1][5]) < amount)) {
+                            break;
+                        } else {
+                            System.out.println("Maximum Order is " + (menu[menuIndex-1][5]));
                             }
                         }
                         receiptData[receiptIndex][0] = menu[menuIndex-1][0];
@@ -432,6 +432,7 @@ public class Kasir {
             while (checkOrderMore) {
                 System.out.print("Do you want to order more? (y/n) : ");
                 orderMore = input.next();
+                    
 
                 if (orderMore.equalsIgnoreCase("n")) {
                     System.out.println("Please select payment type.");
@@ -581,7 +582,6 @@ public class Kasir {
         double 
             paymentAmount = 0.0,
             change = 0.0;
-
         System.out.println("Total price           : " + formatCurrency(totalPrice));
         while (paymentAmount - totalPrice < 0) {
             System.out.print("Input payment nominal : ");
@@ -621,9 +621,6 @@ public class Kasir {
         System.out.printf("|%-4s %-46s %-21s %-10s|%-21s|%n", "    ", "                  ", "      ", "    ", "      ");
         System.out.printf("+%-4s-%-46s-%-21s-%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
         System.out.println("Thanks for the purchase!");
-        
-        // todaysIncome += totalPrice;
-        // totalPrice = 0.0;
 
         todaysIncome += totalPrice;
         cashierActions(table, todaysIncome);
