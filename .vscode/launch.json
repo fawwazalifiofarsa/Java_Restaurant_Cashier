@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Coba",
+            "request": "launch",
+            "mainClass": "Coba",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "Kasir",
             "request": "launch",
             "mainClass": "Kasir",
