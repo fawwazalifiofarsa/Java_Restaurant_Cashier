@@ -196,7 +196,7 @@ public class Kasir {
         while (true) {
             System.out.print("Select your action : ");
             inputAction = input.nextInt();
-            if (inputAction > 4) {
+            if (inputAction > 5) {
                 System.out.println("Please select available action.");
                 continue;
             } else {
@@ -861,8 +861,6 @@ public class Kasir {
     }
 
     public static void discountAlFitr() {
-        System.out.println();
-        System.out.println();
         discountHorizontalGrid();
         System.out.printf("| %-40s |%n", "                --------- Happy Eid al-Fitr! ---------                ");
         discountHorizontalGrid();
@@ -872,12 +870,8 @@ public class Kasir {
         System.out.printf("| %-70s |%n", "Get your discount by 25% with reaching your total price to");
         System.out.printf("| %-70s |%n", "Rp. 300.000!!!");
         discountHorizontalGrid();
-        System.out.println();
-        System.out.println();
     }
     public static void discountChristmast() {
-        System.out.println();
-        System.out.println();
         discountHorizontalGrid();
         System.out.printf("| %-40s |%n", "                --------- Merry Christmas!!! ---------                ");
         discountHorizontalGrid();
@@ -887,12 +881,8 @@ public class Kasir {
         System.out.printf("| %-70s |%n", "Get your price cut by 35% with reaching your total price to");
         System.out.printf("| %-70s |%n", "Rp. 500.000!!!");
         discountHorizontalGrid();
-        System.out.println();
-        System.out.println();
     }
     public static void discountIndependence() {
-        System.out.println();
-        System.out.println();
         discountHorizontalGrid();
         System.out.printf("| %-40s |%n", "            --------- Happy Independence Day!!! ---------             ");
         discountHorizontalGrid();
@@ -901,7 +891,5 @@ public class Kasir {
         System.out.printf("| %-70s |%n", "Get your price cut by 15% with reaching your total price to");
         System.out.printf("| %-70s |%n", "Rp. 350.000!!!");
         discountHorizontalGrid();
-        System.out.println();
-        System.out.println();
     }
 }
