@@ -6,10 +6,17 @@
     "configurations": [
         {
             "type": "java",
+<<<<<<< HEAD
             "name": "test",
             "request": "launch",
             "mainClass": "test",
             "projectName": "Java_Restaurant_Cashier_7110e4a2"
+=======
+            "name": "Coba",
+            "request": "launch",
+            "mainClass": "Coba",
+            "projectName": ""
+>>>>>>> 87df01eda7bd8b69e716255b2d85861958992a66
         },
         {
             "type": "java",

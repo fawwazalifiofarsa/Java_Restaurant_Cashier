@@ -146,8 +146,9 @@ public class Kasir {
         { "Raul", "Raul" }
     };
     static boolean userAuthorization;
-    static int table = 0;
+    static int table = 5;
     static double todaysIncome = 0.0;
+    static int choseDiscount = 0;
     public static void main(String[] args) {
 
         // Login with function
@@ -161,18 +162,41 @@ public class Kasir {
     
     // Functions Initialization
     public static void cashierActions() {
-
         int inputAction;
+
+        switch (choseDiscount) {
+            case 1:
+                System.out.println("==========================================================");
+                System.out.println("Selamat Hari Raya Idul Fitri!");
+                System.out.println("Total price will be cut by 25% when it reach Rp. 300.000");
+                System.out.println("==========================================================");
+                break;
+            case 2:
+                System.out.println("==========================================================");
+                System.out.println("Merry Christmast!");
+                System.out.println("Total price will be cut by 35% when it reach Rp. 500.000");
+                System.out.println("==========================================================");
+                break;
+            case 3:
+                System.out.println("==========================================================");
+                System.out.println("Happy independence day!");
+                System.out.println("Total price will be cut by 15% when it reach Rp. 350.000");
+                System.out.println("==========================================================");
+                break;
+            default:
+                break;
+        }
         System.out.println("There is " + table + " avaible table");
         System.out.println("1. Process Transaction");
         System.out.println("2. Input Table");
-        System.out.println("3. Input Stock");
+        System.out.println("3. Input Stock Menu");
         System.out.println("4. View Sales Reports");
+        System.out.println("5. Add Discount");
         System.out.println("0. Turn OFf Cashier System");
         while (true) {
             System.out.print("Select your action : ");
             inputAction = input.nextInt();
-            if (inputAction > 3) {
+            if (inputAction > 4) {
                 System.out.println("Please select available action.");
                 continue;
             } else {
@@ -191,13 +215,28 @@ public class Kasir {
             case 4:
                 System.out.println("Today's income : " + formatCurrency(todaysIncome));
                 cashierActions();
+            case 5:
+                insertDiscount();
+                cashierActions();
             default:
                 System.exit(0);
                 break;
         }
     }
 
-    // This is to insert the table
+    // Functions
+
+    public static void insertDiscount(){
+        System.out.println("Insert content of the discount");
+        System.out.println("1. Hari Raya Idul Fitri");
+        System.out.println("2. Hari Raya Natal");
+        System.out.println("3. Hari Kemerdekaan");
+        System.out.println("0. Delete discount");
+        System.out.print("Choose your options : ");
+
+        choseDiscount = input.nextInt();
+    }
+
     public static int inputTable(
         int table
     ) {
@@ -249,7 +288,7 @@ public class Kasir {
             }
         }
     }
-    
+
     public static boolean login(
         String[][] user
     ) {
@@ -348,7 +387,7 @@ public class Kasir {
         int receiptIndex,
         double todaysIncome
     ) {
-        int menuIndex, menuTypesIndex, amount;
+        int menuIndex = 0, menuTypesIndex, amount = 0;
         int[] index = new int[menu.length];
         String orderMore = null; 
         double pricePerMenu = 0;
@@ -360,6 +399,19 @@ public class Kasir {
             checkOrderMore;
 
         // select menu.
+        switch (choseDiscount) {
+            case 1:
+                discountAlFitr();
+                break;
+            case 2:
+                discountChristmast();
+                break;
+            case 3:
+                discountIndependence();
+                break;
+            default:
+                break;
+        }
         checkSelectMenu = true;
         while (checkSelectMenu) {
             menuTypeHorizontalGrid();
@@ -492,9 +544,96 @@ public class Kasir {
             } else {
                 continue;
             }
-            Payment(totalPrice);
+
+            double beforeDis = totalPrice;
+            double discount = 0;
+
+            switch (choseDiscount) {
+                case 1:
+                    if (totalPrice >= 300000) {
+                        discount = totalPrice * 0.25;
+                        totalPrice = beforeDis - discount;
+                        System.out.println("Congratulation for your discount!");
+                        System.out.println("Total price : Rp. " + formatCurrency(totalPrice));
+                        System.out.println("You save Rp. " + formatCurrency(beforeDis - totalPrice) + " of your money");
+                    }
+                    break;
+                case 2:
+                    if (totalPrice >= 500000) {
+                        discount = beforeDis * 0.35;
+                        totalPrice = beforeDis - discount;
+                        System.out.println("Congratulation for your discount!");
+                        System.out.println("Total price : Rp. " + formatCurrency(totalPrice));
+                        System.out.println("You save Rp. " + formatCurrency(beforeDis - totalPrice) + " of your money");
+
+                    }
+                    break;
+                case 3:
+                    if (totalPrice >= 350000) {
+                        discount = beforeDis * 0.15;
+                        totalPrice = beforeDis - discount;
+                        System.out.println("Congratulation for your discount!");
+                        System.out.println("Total price : " + formatCurrency(totalPrice));
+                        System.out.println("You save " + formatCurrency(beforeDis - totalPrice) + " of your money");
+
+                    }
+                    break;
+                default:
+                    break;
+            }
+            confirmation(totalPrice,menuIndex,amount,discount);
+            Payment(totalPrice, discount);
             checkSelectMenu = false;
         }
+    }
+
+    public static void confirmation(double totalPrice, int menuIndex,int amount,double discount){
+
+        String menuConfirmation = " ", selectedDiningOptions = "";;
+
+        receiptHorizontalGrid();
+        System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", "No", "Menu Item", "Price", "Amount", "Total Price");
+        receiptHorizontalGrid();
+
+        for (int i = 0; i < receiptData.length; i++) {
+            if (
+                    receiptData[i][0] != null ||
+                            receiptData[i][1] != null ||
+                            receiptData[i][2] != null ||
+                            receiptData[i][3] != null)
+            {
+                System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", i + 1, receiptData[i][0], receiptData[i][1], receiptData[i][2] , "Rp. " + addCommas(Integer.parseInt(receiptData[i][3])));
+            }
+        }
+        receiptHorizontalGrid();
+        System.out.printf("| %-83s| %-20s|%n", "Discount", formatCurrency(discount));
+        receiptHorizontalGrid();
+        System.out.printf("| %-83s| %-20s|%n", "Total Price", formatCurrency(totalPrice));
+        receiptHorizontalGrid();
+        while (!menuConfirmation.equalsIgnoreCase("y") || !menuConfirmation.equalsIgnoreCase("n")){
+            System.out.print("Do you want to change menu? (y/n): ");
+            menuConfirmation = input.next();
+
+            if (menuConfirmation.equalsIgnoreCase("y")){
+                for (int i = 0; i < receiptData.length; i++) {
+                    System.out.println(receiptData[i][0]);
+                    if (receiptData[i][0] == null){
+                        break;
+                    }
+                    for (int j = 0; j < menu.length; j++) {
+                        if (receiptData[i][0].equals(menu[j][0])){
+                            menu[j][5] = String.valueOf(Integer.parseInt(menu[j][5]) + Integer.parseInt(receiptData[i][2]));
+                        }
+                    }
+                }
+                selectMenu(selectedDiningOptions, table, 0.0, 0, todaysIncome);
+            } else if (menuConfirmation.equalsIgnoreCase("n")) {
+                Payment(totalPrice,discount);
+            }
+
+        }
+
+
     }
 
     public static void menuHorizontalGrid() {
@@ -506,7 +645,8 @@ public class Kasir {
     }
 
     public static void Payment(
-        double totalPrice
+        double totalPrice,
+        double discount
     ) {
         String[] paymentType = {
             "Cash",
@@ -523,12 +663,12 @@ public class Kasir {
             paymentId = input.nextInt();
             // Cash payment type.
             if (paymentId == 1) {
-                Cash( paymentId, paymentType[paymentId-1], totalPrice);
+                Cash( paymentId, paymentType[paymentId-1], totalPrice, discount);
                 break;
             } 
             // Debit payment type.
             else if (paymentId == 2) {
-                Debit( paymentId, paymentType[paymentId-1], totalPrice);
+                Debit( paymentId, paymentType[paymentId-1], totalPrice, discount);
                 break;
             } 
             // Unavailable payment type.
@@ -542,7 +682,8 @@ public class Kasir {
     public static void Debit(
         int paymentId,
         String paymentType,
-        double totalPrice
+        double totalPrice,
+        double discount
     ) {
         int bankId;
         boolean checkBank = true;
@@ -572,6 +713,9 @@ public class Kasir {
                         }
                     }
                     receiptHorizontalGrid();
+                    System.out.printf("| %-83s| %-20s|%n", "Discount", formatCurrency(discount));
+                    System.out.printf("|%-4s %-46s %-21s %-10s|%-21s|%n", "    ", "                  ", "      ", "    ", "      ");
+                    System.out.printf("+%-4s-%-46s-%-21s-%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
                     System.out.printf("| %-83s| %-20s|%n", "Payment", paymentType);
                     System.out.printf("|%-4s %-46s %-21s %-10s|%-21s|%n", "    ", "                  ", "      ", "    ", "      ");
                     System.out.printf("+%-4s-%-46s-%-21s-%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
@@ -600,7 +744,8 @@ public class Kasir {
     public static void Cash(
         int paymentId,
         String paymentType,
-        double totalPrice
+        double totalPrice,
+        double discount
     ) {
         double 
             paymentAmount = 0.0,
@@ -632,6 +777,9 @@ public class Kasir {
             }
         }
         receiptHorizontalGrid();
+        System.out.printf("| %-83s| %-20s|%n", "Discount", formatCurrency(discount));
+        System.out.printf("|%-4s %-46s %-21s %-10s|%-21s|%n", "    ", "                  ", "      ", "    ", "      ");
+        System.out.printf("+%-4s-%-46s-%-21s-%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
         System.out.printf("| %-83s| %-20s|%n", "Payment Type", paymentType);
         System.out.printf("|%-4s %-46s %-21s %-10s|%-21s|%n", "    ", "                  ", "      ", "    ", "      ");
         System.out.printf("+%-4s-%-46s-%-21s-%-10s+%-21s+%n", "----", "----------------------------------------------", "---------------------", "----------", "---------------------");
@@ -706,5 +854,54 @@ public class Kasir {
         }
 
         return result.toString();
+    }
+
+    public static void discountHorizontalGrid() {
+        System.out.printf("+%-70s+%n", "------------------------------------------------------------------------");
+    }
+
+    public static void discountAlFitr() {
+        System.out.println();
+        System.out.println();
+        discountHorizontalGrid();
+        System.out.printf("| %-40s |%n", "                --------- Happy Eid al-Fitr! ---------                ");
+        discountHorizontalGrid();
+        System.out.printf("| %-70s |%n", "Taqabbalallahu minna wa minkum, Forgive me, both in body and soul. May");
+        System.out.printf("| %-70s |%n", "we all attain true victory on this blessed day.");
+        System.out.printf("| %-70s |%n", " ");
+        System.out.printf("| %-70s |%n", "Get your discount by 25% with reaching your total price to");
+        System.out.printf("| %-70s |%n", "Rp. 300.000!!!");
+        discountHorizontalGrid();
+        System.out.println();
+        System.out.println();
+    }
+    public static void discountChristmast() {
+        System.out.println();
+        System.out.println();
+        discountHorizontalGrid();
+        System.out.printf("| %-40s |%n", "                --------- Merry Christmas!!! ---------                ");
+        discountHorizontalGrid();
+        System.out.printf("| %-70s |%n", "Warmest thoughts and best wishes for a wonderful Christmas and a Happy");
+        System.out.printf("| %-70s |%n", "New Year.");
+        System.out.printf("| %-70s |%n", " ");
+        System.out.printf("| %-70s |%n", "Get your price cut by 35% with reaching your total price to");
+        System.out.printf("| %-70s |%n", "Rp. 500.000!!!");
+        discountHorizontalGrid();
+        System.out.println();
+        System.out.println();
+    }
+    public static void discountIndependence() {
+        System.out.println();
+        System.out.println();
+        discountHorizontalGrid();
+        System.out.printf("| %-40s |%n", "            --------- Happy Independence Day!!! ---------             ");
+        discountHorizontalGrid();
+        System.out.printf("| %-70s |%n", "May the flag of our country always fly high.");
+        System.out.printf("| %-70s |%n", " ");
+        System.out.printf("| %-70s |%n", "Get your price cut by 15% with reaching your total price to");
+        System.out.printf("| %-70s |%n", "Rp. 350.000!!!");
+        discountHorizontalGrid();
+        System.out.println();
+        System.out.println();
     }
 }
