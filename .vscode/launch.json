@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "test",
+            "request": "launch",
+            "mainClass": "test",
+            "projectName": "Java_Restaurant_Cashier_7110e4a2"
+        },
+        {
+            "type": "java",
             "name": "Kasir",
             "request": "launch",
             "mainClass": "Kasir",

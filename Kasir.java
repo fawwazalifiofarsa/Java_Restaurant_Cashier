@@ -146,7 +146,7 @@ public class Kasir {
         { "Raul", "Raul" }
     };
     static boolean userAuthorization;
-    static int table = 5;
+    static int table = 0;
     static double todaysIncome = 0.0;
     public static void main(String[] args) {
 
@@ -165,8 +165,9 @@ public class Kasir {
         int inputAction;
         System.out.println("There is " + table + " avaible table");
         System.out.println("1. Process Transaction");
-        System.out.println("2. Insert Avaible Tables");
-        System.out.println("3. View Sales Reports");
+        System.out.println("2. Input Table");
+        System.out.println("3. Input Stock");
+        System.out.println("4. View Sales Reports");
         System.out.println("0. Turn OFf Cashier System");
         while (true) {
             System.out.print("Select your action : ");
@@ -182,9 +183,12 @@ public class Kasir {
             case 1:
                 selectDiningOption(diningOptions);
             case 2:
-                table += insertTable(table);
+                table += inputTable(table);
                 cashierActions();
             case 3:
+                inputStock(menu);
+                cashierActions();
+            case 4:
                 System.out.println("Today's income : " + formatCurrency(todaysIncome));
                 cashierActions();
             default:
@@ -194,7 +198,7 @@ public class Kasir {
     }
 
     // This is to insert the table
-    public static int insertTable(
+    public static int inputTable(
         int table
     ) {
         System.out.println("There is " + table + " avaible table");
@@ -203,6 +207,49 @@ public class Kasir {
         return table;
     }
 
+    public static void inputStock(
+        String[][] menu
+    ) {
+        int id, stock;
+        menuHorizontalGrid();
+        System.out.printf(
+            "| %-3s| %-45s| %-20s| %-20s| %-10s| %n",
+            "ID", "Menu Item", "Category", "Price", "Stock");
+        menuHorizontalGrid();
+
+        for (int i = 0; i < menu.length; i++) {
+            System.out.printf("| %-3s| %-45s| %-20s| %-20s| %-10s|%n", (i+1), menu[i][0], menu[i][4], menu[i][1],menu[i][5]);
+        }
+        menuHorizontalGrid();
+        System.out.printf("| %-106s|%n", "0. Back");
+        System.out.printf("+%103s+%n", "-----------------------------------------------------------------------------------------------------------");
+        while (true) {
+            System.out.print("Select ID Menu to Edit : ");
+            id = input.nextInt();
+            if (id > menu.length) {
+                System.out.println("Please input a valid ID.");
+                continue;
+            } else if (id == 0) {
+                cashierActions();
+            } else {
+                System.out.println("Updating Stock of " + menu[id-1][0]);
+                while (true) {
+                    System.out.print("Insert available stock : ");
+                    stock = input.nextInt();
+                    if (stock == 0) {
+                        inputStock(menu);
+                        break;
+                    } else {
+                        menu[id-1][5] = Integer.toString(Integer.parseInt(menu[id-1][5]) + stock);
+                        System.out.println("Stock of " + menu[id-1][0] + " Updated");
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+    
     public static boolean login(
         String[][] user
     ) {
