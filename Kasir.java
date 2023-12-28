@@ -339,7 +339,7 @@ public class Kasir {
         int receiptIndex,
         double todaysIncome
     ) {
-        int menuIndex, menuTypesIndex, amount;
+        int menuIndex = 0, menuTypesIndex, amount = 0;
         int[] index = new int[menu.length];
         String orderMore = null; 
         double pricePerMenu = 0;
@@ -533,9 +533,59 @@ public class Kasir {
                 default:
                     break;
             }
+            confirmation(totalPrice,menuIndex,amount,discount);
             Payment(totalPrice, discount);
             checkSelectMenu = false;
         }
+    }
+
+    public static void confirmation(double totalPrice, int menuIndex,int amount,double discount){
+
+        String menuConfirmation = " ", selectedDiningOptions = "";;
+
+        receiptHorizontalGrid();
+        System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", "No", "Menu Item", "Price", "Amount", "Total Price");
+        receiptHorizontalGrid();
+
+        for (int i = 0; i < receiptData.length; i++) {
+            if (
+                    receiptData[i][0] != null ||
+                            receiptData[i][1] != null ||
+                            receiptData[i][2] != null ||
+                            receiptData[i][3] != null)
+            {
+                System.out.printf("| %-3s| %-45s| %-20s| %-9s| %-20s|%n", i + 1, receiptData[i][0], receiptData[i][1], receiptData[i][2] , "Rp. " + addCommas(Integer.parseInt(receiptData[i][3])));
+            }
+        }
+        receiptHorizontalGrid();
+        System.out.printf("| %-83s| %-20s|%n", "Discount", formatCurrency(discount));
+        receiptHorizontalGrid();
+        System.out.printf("| %-83s| %-20s|%n", "Total Price", formatCurrency(totalPrice));
+        receiptHorizontalGrid();
+        while (!menuConfirmation.equalsIgnoreCase("y") || !menuConfirmation.equalsIgnoreCase("n")){
+            System.out.print("Do you want to change menu? (y/n): ");
+            menuConfirmation = input.next();
+
+            if (menuConfirmation.equalsIgnoreCase("y")){
+                for (int i = 0; i < receiptData.length; i++) {
+                    System.out.println(receiptData[i][0]);
+                    if (receiptData[i][0] == null){
+                        break;
+                    }
+                    for (int j = 0; j < menu.length; j++) {
+                        if (receiptData[i][0].equals(menu[j][0])){
+                            menu[j][5] = String.valueOf(Integer.parseInt(menu[j][5]) + Integer.parseInt(receiptData[i][2]));
+                        }
+                    }
+                }
+                selectMenu(selectedDiningOptions, table, 0.0, 0, todaysIncome);
+            } else if (menuConfirmation.equalsIgnoreCase("n")) {
+                Payment(totalPrice,discount);
+            }
+
+        }
+
+
     }
 
     public static void menuHorizontalGrid() {
